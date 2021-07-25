@@ -1,8 +1,21 @@
 $color--black: #000;
 $color--white: #fff;
 
+html {
+  box-sizing: border-box;
+}
+
 body {
   background-color: $color--black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  canvas {
+    background-color: $color--white;
+  }
   h1 {
     color: $color--white;
     display: flex;
