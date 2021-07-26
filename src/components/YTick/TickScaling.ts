@@ -5,7 +5,7 @@ export default class TickScaling {
   public minTick: number;
   public maxTick: number;
   private range: number;
-  public maxNumTicks: number = options.yAxis.priceChart.maxNumTicks;
+  public maxNumTicks: number = options.yAxis.maxNumTicks;
 
   constructor(public minPoint: number, public maxPoint: number) {
     this.calculate();

@@ -13,6 +13,7 @@ export default class GlobalState {
   public barWidth: number = 0;
   public posXLeftByIdx: number[] = [];
   public posXCenterByIdx: number[] = [];
+  public fontSize: { xAxis: number; yAxis: number } = { xAxis: 10, yAxis: 10 };
 
   private constructor() {
     if (
@@ -39,6 +40,7 @@ export default class GlobalState {
     this.layout.update(canvasWidth, canvasHeight);
     this.updateBarWidth();
     this.updatePosXList();
+    this.updateFontSize();
   }
 
   private updateBarWidth() {
@@ -73,6 +75,17 @@ export default class GlobalState {
       this.layout.global.margin.right +
       Math.min(0, this.offsetCount) * this.barWidth
     );
+  }
+
+  public updateFontSize() {
+    const locations: ('xAxis' | 'yAxis')[] = ['xAxis', 'yAxis'];
+    locations.forEach((loc: 'xAxis' | 'yAxis') => {
+      const { maxFontSize, minFontSize, fontSizeRatio } = options[loc];
+      this.fontSize[loc] = Math.max(
+        minFontSize,
+        Math.min(maxFontSize, window.innerWidth * fontSizeRatio)
+      );
+    });
   }
 
   public zoomIn(): void {

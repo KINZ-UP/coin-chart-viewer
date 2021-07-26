@@ -1,15 +1,16 @@
 import options from '../options';
 import PriceChart from './PriceChart';
 import GlobalState from './GlobalState';
-import Margin, { margin } from './Layout';
 import TrVolumeChart from './TrVolumeChart';
 import debounce from '../lib/debounce';
+import XAxis from './XAxis';
 
 export default class Canvas {
   private _canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null;
   public priceChart: PriceChart;
   public trVolumeChart: TrVolumeChart;
+  public xAxis: XAxis;
   public globalState: GlobalState;
 
   public isMouseDown: boolean = false;
@@ -53,12 +54,14 @@ export default class Canvas {
   private init(): void {
     this.priceChart = new PriceChart(this.ctx);
     this.trVolumeChart = new TrVolumeChart(this.ctx);
+    this.xAxis = new XAxis(this.ctx);
   }
 
   private update(): void {
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.updateLayout();
 
+    this.xAxis.update();
     this.priceChart.update();
     this.trVolumeChart.update();
   }

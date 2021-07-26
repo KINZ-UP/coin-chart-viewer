@@ -26,18 +26,13 @@ export default class PriceChartYTick {
 
   public draw(): void {
     if (!this.ctx) return;
-    const { fillStyle, leftPadding, maxFontSize, minFontSize, fontFamily } =
-      options.yAxis.priceChart;
-    const fontSize = Math.max(
-      minFontSize,
-      Math.min(maxFontSize, window.innerWidth * 0.03)
-    );
+    const { fillStyle, leftPadding, fontFamily } = options.yAxis;
 
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
     this.ctx.fillStyle = fillStyle;
     this.ctx.strokeStyle = options.color.gridLine;
-    this.ctx.font = `${fontSize}px ${fontFamily}`;
+    this.ctx.font = `${this.state.globalState.fontSize.yAxis}px ${fontFamily}`;
     let currY = this.getTickStart();
     while (currY <= this.state.maxPriceOnView) {
       const scaledCurrTick = this.yScale(currY);

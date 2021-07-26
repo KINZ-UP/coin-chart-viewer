@@ -37,22 +37,22 @@ const options = {
   },
   numBarsOnViewList: [8, 12, 17, 23, 30, 38, 47, 57, 68, 80, 93, 105],
   yAxis: {
-    priceChart: {
-      maxNumTicks: 7,
-      fillStyle: '#333',
-      fontFamily: 'Montserrat',
-      maxFontSize: 12,
-      minFontSize: 8,
-      leftPadding: 7,
-    },
-    trVolumeChart: {
-      maxNumTicks: 7,
-      fillStyle: '#333',
-      fontFamily: 'Montserrat',
-      maxFontSize: 12,
-      minFontSize: 8,
-      leftPadding: 7,
-    },
+    maxNumTicks: 7,
+    fillStyle: '#333',
+    fontFamily: 'Montserrat',
+    maxFontSize: 12,
+    minFontSize: 8,
+    fontSizeRatio: 0.03,
+    leftPadding: 7,
+  },
+  xAxis: {
+    fillStyle: '#333',
+    fontFamily: 'Montserrat',
+    maxFontSize: 12,
+
+    minFontSize: 8,
+    fontSizeRatio: 0.03,
+    topPadding: 5,
   },
   barPaddingRatio: {
     priceChart: 0.2,
