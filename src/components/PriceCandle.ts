@@ -1,3 +1,4 @@
+import strokeLine from '../lib/strokeLine';
 import options from '../options';
 import PriceChartState from './PriceChartState';
 
@@ -48,9 +49,13 @@ export default class PriceCandle {
     this.ctx.strokeStyle = this.isUp
       ? options.color.candleShadow.up
       : options.color.candleShadow.down;
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.posXCenter, this.shadowTop);
-    this.ctx.lineTo(this.posXCenter, this.shadowBottom);
-    this.ctx.stroke();
+
+    strokeLine(
+      this.ctx,
+      this.posXCenter,
+      this.shadowTop,
+      this.posXCenter,
+      this.shadowBottom
+    );
   }
 }

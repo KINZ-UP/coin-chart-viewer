@@ -1,3 +1,4 @@
+import strokeLine from '../../lib/strokeLine';
 import options from '../../options';
 import TrVolumeChartState from '../TrVolumeChartState';
 import TickScaling from './TickScaling';
@@ -35,17 +36,16 @@ export default class TrVolumeChartYTick {
         this.state.globalState.layout.width + leftPadding,
         scaledCurrTick
       );
-      this.ctx.beginPath();
-      this.ctx.moveTo(
-        this.state.globalState.layout.lower.margin.left,
+
+      const gridStartX = this.state.globalState.layout.lower.margin.left;
+      const gridEndX = gridStartX + this.state.globalState.layout.width;
+      strokeLine(
+        this.ctx,
+        gridStartX,
+        scaledCurrTick,
+        gridEndX,
         scaledCurrTick
       );
-      this.ctx.lineTo(
-        this.state.globalState.layout.lower.margin.left +
-          this.state.globalState.layout.width,
-        scaledCurrTick
-      );
-      this.ctx.stroke();
       currY += this.tickScale.tickSpacing;
     }
   }

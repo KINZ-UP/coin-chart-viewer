@@ -1,4 +1,5 @@
 import getDateString from '../lib/getDateString';
+import strokeLine from '../lib/strokeLine';
 import options from '../options';
 import GlobalState from './GlobalState';
 
@@ -54,14 +55,8 @@ export default class XAxis {
       if (!this.ctx) return;
       const posX = this.globalState.posXCenterByIdx[idx];
       this.ctx.fillText(this.labels[i], posX, labelPosY);
-      this.ctx.beginPath();
-      this.ctx.moveTo(posX, upperGridStart);
-      this.ctx.lineTo(posX, upperGridEnd);
-      this.ctx.stroke();
-      this.ctx.beginPath();
-      this.ctx.moveTo(posX, lowerGridStart);
-      this.ctx.lineTo(posX, lowerGridEnd);
-      this.ctx.stroke();
+      strokeLine(this.ctx, posX, upperGridStart, posX, upperGridEnd);
+      strokeLine(this.ctx, posX, lowerGridStart, posX, lowerGridEnd);
     });
   }
 }

@@ -1,3 +1,4 @@
+import strokeLine from '../../lib/strokeLine';
 import options from '../../options';
 import PriceChartState from '../PriceChartState';
 import TickScaling from './TickScaling';
@@ -41,17 +42,14 @@ export default class PriceChartYTick {
         this.state.globalState.layout.width + leftPadding,
         scaledCurrTick
       );
-      this.ctx.beginPath();
-      this.ctx.moveTo(
+      strokeLine(
+        this.ctx,
         this.state.globalState.layout.upper.margin.left,
-        scaledCurrTick
-      );
-      this.ctx.lineTo(
+        scaledCurrTick,
         this.state.globalState.layout.upper.margin.left +
           this.state.globalState.layout.width,
         scaledCurrTick
       );
-      this.ctx.stroke();
       currY += this.tickScale.tickSpacing;
     }
   }
