@@ -14,8 +14,12 @@ export default class TrVolumeBar {
     public isUp: boolean
   ) {
     this.state = TrVolumnChartState.getInstance();
-    this.posX = this.state.globalState.posXLeftByIdx[idx];
-    this.width = this.state.globalState.barWidth;
+    this.posX =
+      this.state.globalState.posXLeftByIdx[idx] +
+      this.state.globalState.barWidth * options.barPaddingRatio.trVolumeChart;
+    this.width =
+      this.state.globalState.barWidth *
+      (1 - 2 * options.barPaddingRatio.trVolumeChart);
   }
 
   public draw() {

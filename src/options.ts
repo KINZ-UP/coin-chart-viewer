@@ -54,6 +54,10 @@ const options = {
       leftPadding: 7,
     },
   },
+  barPaddingRatio: {
+    priceChart: 0.2,
+    trVolumeChart: 0.3,
+  },
 };
 
 export default options;

@@ -19,9 +19,13 @@ export default class PriceCandle {
     public isUp: boolean
   ) {
     this.state = PriceChartState.getInstance();
-    this.posXLeft = this.state.globalState.posXLeftByIdx[this.idx];
+    this.posXLeft =
+      this.state.globalState.posXLeftByIdx[this.idx] +
+      this.state.globalState.barWidth * options.barPaddingRatio.priceChart;
     this.posXCenter = this.state.globalState.posXCenterByIdx[this.idx];
-    this.width = this.state.globalState.barWidth;
+    this.width =
+      this.state.globalState.barWidth *
+      (1 - 2 * options.barPaddingRatio.priceChart);
   }
 
   public draw() {
