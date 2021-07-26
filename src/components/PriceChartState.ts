@@ -1,16 +1,16 @@
-import { data, sampleData } from '../sampleData';
+import { data } from '../sampleData';
 import GlobalState from './GlobalState';
 
-export class PriceChartState {
+export default class PriceChartState {
   public static instance: PriceChartState | null = null;
-  GlobalState: GlobalState;
+  globalState: GlobalState;
   dataOnView: data[];
   public maxPriceOnView: number;
   public minPriceOnView: number;
   public minMaxDiff: number;
 
   private constructor() {
-    this.GlobalState = GlobalState.getInstance();
+    this.globalState = GlobalState.getInstance();
     this.update();
   }
 
@@ -28,7 +28,7 @@ export class PriceChartState {
   }
 
   public calcMaxPrice(): number {
-    return this.GlobalState.dataOnView.reduce(
+    return this.globalState.dataOnView.reduce(
       (maxPrice: number, data: data) => {
         return Math.max(maxPrice, data.high_price);
       },
@@ -37,7 +37,7 @@ export class PriceChartState {
   }
 
   public calcMinPrice(): number {
-    return this.GlobalState.dataOnView.reduce(
+    return this.globalState.dataOnView.reduce(
       (minPrice: number, data: data) => {
         return Math.min(minPrice, data.low_price);
       },

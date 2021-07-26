@@ -1,5 +1,5 @@
 import options from '../options';
-import { PriceChartState } from './PriceChartState';
+import PriceChartState from './PriceChartState';
 
 export default class PriceCandle {
   public state: PriceChartState;
@@ -41,7 +41,7 @@ export default class PriceCandle {
   private drawShadow() {
     if (!this.ctx) return;
 
-    const posXShadow = this.bodyLeft + this.state.GlobalState.barWidth / 2;
+    const posXShadow = this.bodyLeft + this.state.globalState.barWidth / 2;
     this.ctx.strokeStyle = this.isUp
       ? options.color.candleShadow.up
       : options.color.candleShadow.down;

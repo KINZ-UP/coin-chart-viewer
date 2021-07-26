@@ -1,30 +1,16 @@
 import options from '../options';
 import { data, sampleData } from '../sampleData';
-import { margin } from './Margin';
+import Layout, { margin } from './Layout';
 
 export default class GlobalState {
   private static instance: GlobalState | null = null;
+  public layout: Layout;
   public scaleLevel: number = 4;
   public numBarsOnView: number;
   public sampleData: data[] = sampleData;
   public dataOnView: data[];
   public offsetCount: number = 0;
-  public chartWidth: number = 0;
   public barWidth: number = 0;
-  public upperChartHeight: number = 0;
-  public lowerChartHeight: number = 0;
-  public upperChartMargin: margin = {
-    top: 0,
-    left: 0,
-    bottom: 0.5,
-    right: 0,
-  };
-  public lowerChartMargin: margin = {
-    top: 0.5,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  };
 
   private constructor() {
     if (
@@ -36,6 +22,7 @@ export default class GlobalState {
       );
     }
 
+    this.layout = new Layout();
     this.updateState();
   }
 
@@ -46,41 +33,13 @@ export default class GlobalState {
     return GlobalState.instance;
   }
 
-  public updateGeometry(
-    chartWidth: number,
-    upperChartHeight: number,
-    lowerChartHeight: number,
-    upperChartMargin: margin,
-    lowerChartMargin: margin
-  ) {
-    this.updateChartWidth(chartWidth);
+  public updateLayout(canvasWidth: number, canvasHeight: number) {
+    this.layout.update(canvasWidth, canvasHeight);
     this.updateBarWidth();
-    this.updateChartHeight(upperChartHeight, lowerChartHeight);
-    this.updateChartMargin(upperChartMargin, lowerChartMargin);
-  }
-
-  private updateChartWidth(chartWidth: number) {
-    this.chartWidth = chartWidth;
   }
 
   private updateBarWidth() {
-    this.barWidth = this.chartWidth / this.numBarsOnView;
-  }
-
-  private updateChartHeight(
-    upperChartHeight: number,
-    lowerChartHeight: number
-  ) {
-    this.upperChartHeight = upperChartHeight;
-    this.lowerChartHeight = lowerChartHeight;
-  }
-
-  private updateChartMargin(
-    upperChartMargin: margin,
-    lowerChartMargin: margin
-  ) {
-    this.upperChartMargin = upperChartMargin;
-    this.lowerChartMargin = lowerChartMargin;
+    this.barWidth = this.layout.width / this.numBarsOnView;
   }
 
   public updateState(): void {

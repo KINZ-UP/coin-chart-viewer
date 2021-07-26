@@ -1,5 +1,5 @@
 import options from '../options';
-import { TrVolumnChartState } from './TrVolumnChartState';
+import TrVolumnChartState from './TrVolumeChartState';
 
 export default class TrVolumeBar {
   public state: TrVolumnChartState;
@@ -17,7 +17,6 @@ export default class TrVolumeBar {
 
   public draw() {
     if (!this.ctx) return;
-
     this.ctx.fillStyle = this.isUp
       ? options.color.candleBody.up
       : options.color.candleBody.down;
