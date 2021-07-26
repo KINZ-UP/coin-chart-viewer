@@ -1,15 +1,13 @@
-import Chart from './Chart';
 import TrVolumeBar from './TrVolumeBar';
 import TrVolumnChartState from './TrVolumeChartState';
 import TrVolumeChartYTick from './YTick/TrVolumeChartYTick';
 
-export default class TrVolumeChart extends Chart {
+export default class TrVolumeChart {
   public state: TrVolumnChartState;
   public barList: TrVolumeBar[] = [];
   public yTick: TrVolumeChartYTick;
 
   constructor(public ctx: CanvasRenderingContext2D | null) {
-    super(ctx);
     this.state = TrVolumnChartState.getInstance();
     this.yTick = new TrVolumeChartYTick(ctx);
   }

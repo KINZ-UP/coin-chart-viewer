@@ -1,15 +1,13 @@
-import Chart from './Chart';
 import PriceCandle from './PriceCandle';
 import PriceChartState from './PriceChartState';
 import PriceChartYTick from './YTick/PriceChartYTick';
 
-export default class PriceChart extends Chart {
+export default class PriceChart {
   public state: PriceChartState;
   public candleList: PriceCandle[] = [];
   public yTick: PriceChartYTick;
 
   constructor(public ctx: CanvasRenderingContext2D | null) {
-    super(ctx);
     this.state = PriceChartState.getInstance();
     this.yTick = new PriceChartYTick(ctx);
   }
