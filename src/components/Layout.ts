@@ -19,7 +19,7 @@ export default class Layout {
   public canvasWidth: number = 0;
   public canvasHeight: number = 0;
   public width: number;
-  private global: layout = {
+  public global: layout = {
     height: 0,
     margin: { top: 0, left: 0, bottom: 0, right: 0 },
   };

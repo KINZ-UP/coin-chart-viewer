@@ -20,9 +20,6 @@ export default class PriceChart {
   private draw() {
     this.yTick.update();
     this.candleList = this.state.globalState.dataOnView.map((data, idx) => {
-      const posX = this.calcCandlePosX(idx);
-      const width = this.state.globalState.barWidth;
-
       const open = this.scaleHeight(data.opening_price);
       const close = this.scaleHeight(data.trade_price);
       const high = this.scaleHeight(data.high_price);
@@ -34,8 +31,7 @@ export default class PriceChart {
 
       const candle = new PriceCandle(
         this.ctx,
-        posX,
-        width,
+        idx,
         open,
         close,
         high,
@@ -48,16 +44,6 @@ export default class PriceChart {
 
       return candle;
     });
-  }
-
-  private calcCandlePosX(idx: number): number {
-    return (
-      this.state.globalState.layout.canvasWidth -
-      this.state.globalState.barWidth * (idx + 1) -
-      this.state.globalState.layout.upper.margin.right +
-      Math.min(0, this.state.globalState.offsetCount) *
-        this.state.globalState.barWidth
-    );
   }
 
   private scaleHeight(value: number): number {

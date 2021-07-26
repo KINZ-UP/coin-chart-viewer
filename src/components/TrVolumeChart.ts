@@ -20,26 +20,14 @@ export default class TrVolumeChart {
   private draw() {
     this.yTick.update();
     this.barList = this.state.globalState.dataOnView.map((data, idx) => {
-      const posX = this.calcPosX(idx);
-      const width = this.state.globalState.barWidth;
       const height = this.scaleHeight(data.candle_acc_trade_volume);
       const posY = this.calcPosY(height);
       const isUp = data.opening_price <= data.trade_price;
-      const bar = new TrVolumeBar(this.ctx, posX, posY, width, height, isUp);
+      const bar = new TrVolumeBar(this.ctx, idx, posY, height, isUp);
 
       bar.draw();
       return bar;
     });
-  }
-
-  private calcPosX(idx: number): number {
-    return (
-      this.state.globalState.layout.canvasWidth -
-      this.state.globalState.barWidth * (idx + 1) -
-      this.state.globalState.layout.lower.margin.right +
-      Math.min(0, this.state.globalState.offsetCount) *
-        this.state.globalState.barWidth
-    );
   }
 
   private scaleHeight(value: number): number {

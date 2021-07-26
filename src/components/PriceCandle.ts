@@ -3,11 +3,13 @@ import PriceChartState from './PriceChartState';
 
 export default class PriceCandle {
   public state: PriceChartState;
+  public posXLeft: number;
+  public posXCenter: number;
+  public width: number;
 
   constructor(
     public ctx: CanvasRenderingContext2D | null,
-    public bodyLeft: number,
-    public bodyWidth: number,
+    private idx: number,
     public bodyTop: number,
     public bodyBottom: number,
     public shadowTop: number,
@@ -17,6 +19,9 @@ export default class PriceCandle {
     public isUp: boolean
   ) {
     this.state = PriceChartState.getInstance();
+    this.posXLeft = this.state.globalState.posXLeftByIdx[this.idx];
+    this.posXCenter = this.state.globalState.posXCenterByIdx[this.idx];
+    this.width = this.state.globalState.barWidth;
   }
 
   public draw() {
@@ -30,24 +35,18 @@ export default class PriceCandle {
     this.ctx.fillStyle = this.isUp
       ? options.color.candleBody.up
       : options.color.candleBody.down;
-    this.ctx.fillRect(
-      this.bodyLeft,
-      this.bodyTop,
-      this.bodyWidth,
-      this.bodyHeight
-    );
+    this.ctx.fillRect(this.posXLeft, this.bodyTop, this.width, this.bodyHeight);
   }
 
   private drawShadow() {
     if (!this.ctx) return;
 
-    const posXShadow = this.bodyLeft + this.state.globalState.barWidth / 2;
     this.ctx.strokeStyle = this.isUp
       ? options.color.candleShadow.up
       : options.color.candleShadow.down;
     this.ctx.beginPath();
-    this.ctx.moveTo(posXShadow, this.shadowTop);
-    this.ctx.lineTo(posXShadow, this.shadowBottom);
+    this.ctx.moveTo(this.posXCenter, this.shadowTop);
+    this.ctx.lineTo(this.posXCenter, this.shadowBottom);
     this.ctx.stroke();
   }
 }

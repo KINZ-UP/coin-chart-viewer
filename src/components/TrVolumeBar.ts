@@ -3,16 +3,19 @@ import TrVolumnChartState from './TrVolumeChartState';
 
 export default class TrVolumeBar {
   public state: TrVolumnChartState;
+  public posX: number;
+  public width: number;
 
   constructor(
     public ctx: CanvasRenderingContext2D | null,
-    public posX: number,
+    public idx: number,
     public posY: number,
-    public width: number,
     public height: number,
     public isUp: boolean
   ) {
     this.state = TrVolumnChartState.getInstance();
+    this.posX = this.state.globalState.posXLeftByIdx[idx];
+    this.width = this.state.globalState.barWidth;
   }
 
   public draw() {
