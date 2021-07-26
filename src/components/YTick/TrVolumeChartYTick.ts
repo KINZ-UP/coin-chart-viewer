@@ -1,14 +1,14 @@
-import YTick from '.';
 import options from '../../options';
 import TrVolumeChartState from '../TrVolumeChartState';
 import TickScaling from './TickScaling';
 
-export default class TrVolumeChartYTick extends YTick {
+export default class TrVolumeChartYTick {
   public state: TrVolumeChartState = TrVolumeChartState.getInstance();
   public minVal: number;
   public maxVal: number;
+  public tickScale: TickScaling;
+
   constructor(public ctx: CanvasRenderingContext2D | null) {
-    super(ctx);
     this.tickScale = new TickScaling(0, this.state.maxTrVolumeOnView);
   }
 

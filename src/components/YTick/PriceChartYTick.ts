@@ -1,15 +1,14 @@
-import YTick from '.';
 import options from '../../options';
 import PriceChartState from '../PriceChartState';
 import TickScaling from './TickScaling';
 
-export default class PriceChartYTick extends YTick {
+export default class PriceChartYTick {
   public state: PriceChartState = PriceChartState.getInstance();
   public minVal: number;
   public maxVal: number;
-  constructor(public ctx: CanvasRenderingContext2D | null) {
-    super(ctx);
+  public tickScale: TickScaling;
 
+  constructor(public ctx: CanvasRenderingContext2D | null) {
     this.tickScale = new TickScaling(
       this.state.minPriceOnView,
       this.state.maxPriceOnView
