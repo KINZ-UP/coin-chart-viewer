@@ -3,7 +3,7 @@ const options = {
     margin: {
       ratio: {
         top: 0.1,
-        left: 0,
+        left: 0.01,
         bottom: 0.05,
         right: 0.2,
       },
@@ -20,18 +20,22 @@ const options = {
         right: 80,
       },
     },
-    gapRatio: 0.05,
+    gapRatio: 0.02,
     upperHeightRatio: 0.7,
     maxAspectRatio: 2,
   },
   color: {
     candleBody: {
-      up: '#e90000',
-      down: '#0000e9',
+      up: '#DE4B4B',
+      down: '#4B99DE',
     },
     candleShadow: {
-      up: '#e90000',
-      down: '#0000e9',
+      up: '#DE4B4B',
+      down: '#4B99DE',
+    },
+    bar: {
+      up: '#C91D1D',
+      down: '#1D78C9',
     },
     gridLine: '#e0e0e0',
   },
@@ -39,24 +43,26 @@ const options = {
   yAxis: {
     maxNumTicks: 7,
     fillStyle: '#333',
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat, Noto Sans KR',
     maxFontSize: 12,
     minFontSize: 8,
     fontSizeRatio: 0.03,
-    leftPadding: 7,
+    leftPadding: 12,
   },
   xAxis: {
     fillStyle: '#333',
     fontFamily: 'Montserrat',
     maxFontSize: 12,
-
     minFontSize: 8,
     fontSizeRatio: 0.03,
     topPadding: 5,
   },
   barPaddingRatio: {
-    priceChart: 0.2,
+    priceChart: 0.1,
     trVolumeChart: 0.3,
+  },
+  outline: {
+    strokeStyle: '#e0e0e0',
   },
 };
 

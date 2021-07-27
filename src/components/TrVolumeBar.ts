@@ -25,8 +25,8 @@ export default class TrVolumeBar {
   public draw() {
     if (!this.ctx) return;
     this.ctx.fillStyle = this.isUp
-      ? options.color.candleBody.up
-      : options.color.candleBody.down;
+      ? options.color.bar.up
+      : options.color.bar.down;
 
     this.ctx.fillRect(this.posX, this.posY, this.width, this.height);
   }
