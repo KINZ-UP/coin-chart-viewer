@@ -32,7 +32,6 @@ export default class Canvas {
 
     this.init();
     this.resize();
-
     this.assignEvents();
   }
 
@@ -59,6 +58,12 @@ export default class Canvas {
     this.trVolumeChart = new TrVolumeChart(this.ctx);
     this.xAxis = new XAxis(this.ctx);
     this.outlines = new Outlines(this.ctx);
+    this.initFetch();
+  }
+
+  private async initFetch(): Promise<void> {
+    await this.globalState.init();
+    this.update();
   }
 
   private update(): void {

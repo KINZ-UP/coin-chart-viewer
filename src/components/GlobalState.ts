@@ -1,5 +1,4 @@
 import options from '../options';
-import { sampleData } from '../sampleData';
 import DataLoader, { data } from './DataLoader';
 import Layout from './Layout';
 
@@ -9,7 +8,7 @@ export default class GlobalState {
   public dataLoader: DataLoader;
   public scaleLevel: number = 4;
   public numBarsOnView: number;
-  public dataOnView: data[];
+  public dataOnView: data[] = [];
   public offsetCount: number = 0;
   public barWidth: number = 0;
   public posXLeftByIdx: number[] = [];
@@ -25,8 +24,10 @@ export default class GlobalState {
         'scale level must be in range of numbBarsOnScreenList indexes'
       );
     }
+    this.layout = new Layout();
+    this.dataLoader = new DataLoader();
 
-    this.init();
+    // this.init();
   }
 
   public static getInstance(): GlobalState {
@@ -36,10 +37,8 @@ export default class GlobalState {
     return GlobalState.instance;
   }
 
-  private init(): void {
-    this.layout = new Layout();
-    this.dataLoader = new DataLoader();
-    this.dataLoader.dataProcess(sampleData);
+  public async init(): Promise<void> {
+    await this.dataLoader.init();
     this.updateState();
   }
 
