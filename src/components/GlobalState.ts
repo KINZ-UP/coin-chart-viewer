@@ -14,6 +14,7 @@ export default class GlobalState {
   public posXLeftByIdx: number[] = [];
   public posXCenterByIdx: number[] = [];
   public fontSize: { xAxis: number; yAxis: number } = { xAxis: 10, yAxis: 10 };
+  public loading: boolean = false;
 
   private constructor() {
     if (

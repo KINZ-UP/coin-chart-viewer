@@ -1,4 +1,4 @@
-import DataFetch from '../lib/api/DataFetch';
+import DataFetch from './api/DataFetch';
 import options from '../options';
 
 export type data = {
@@ -31,6 +31,7 @@ export type movingAverageData = {
 export default class DataLoader {
   public dataFetch: DataFetch;
   public dataList: data[] = [];
+  public rawDataList: rawData[] = [];
   private defaultData: data = {
     openPrice: 0,
     closePrice: 0,
@@ -57,12 +58,27 @@ export default class DataLoader {
     this.dataProcess(rawData);
   }
 
+  public async fetchMore(to: string): Promise<void> {
+    try {
+      const rawData = await this.dataFetch.fetchData({
+        market: 'KRW-BTC',
+        count: 50,
+        to,
+      });
+      this.dataProcess(rawData);
+    } catch (e) {
+      // console.dir(e);
+    }
+  }
+
   public maIntervals: number[] = options.movingAverageList.map(
     (ma) => ma.interval
   );
 
   public dataProcess(newData: rawData[]): void {
+    this.rawDataList = this.rawDataList.concat(newData);
     newData.forEach(this.addNewData.bind(this));
+    console.log(newData);
   }
 
   private addNewData(rawData: rawData): void {

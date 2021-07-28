@@ -5,6 +5,7 @@ import TrVolumeChart from './TrVolumeChart';
 import debounce from '../lib/debounce';
 import XAxis from './XAxis';
 import Outlines from './Outlines';
+import formatDatetimeReqStr from '../lib/formatDatetimeReqStr';
 
 export default class Canvas {
   private _canvas: HTMLCanvasElement;
@@ -69,6 +70,7 @@ export default class Canvas {
   private update(): void {
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.updateLayout();
+    this.updateState();
 
     this.xAxis.update();
     this.priceChart.update();
@@ -78,6 +80,10 @@ export default class Canvas {
 
   private updateLayout(): void {
     this.globalState.updateLayout(this._canvas.width, this._canvas.height);
+  }
+
+  private updateState(): void {
+    this.globalState.updateState();
   }
 
   private assignEvents(): void {
@@ -119,7 +125,28 @@ export default class Canvas {
           Math.floor(mouseMoveX / this.globalState.barWidth)
       );
       this.update();
+      this.onNeedMoreData();
     };
+  }
+
+  private async onNeedMoreData(): Promise<void> {
+    if (this.globalState.loading) return;
+    const dataList = this.globalState.dataLoader.dataList;
+
+    if (
+      dataList.length -
+        this.globalState.offsetCount -
+        this.globalState.dataOnView.length >=
+      50
+    )
+      return;
+
+    this.globalState.loading = true;
+    await this.globalState.dataLoader.fetchMore(
+      formatDatetimeReqStr(dataList[dataList.length - 1].dateTime)
+    );
+    this.update();
+    this.globalState.loading = false;
   }
 
   private mouseUp(): void {
