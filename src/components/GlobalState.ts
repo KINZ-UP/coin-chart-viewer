@@ -1,13 +1,14 @@
 import options from '../options';
-import { data, sampleData } from '../sampleData';
-import Layout, { margin } from './Layout';
+import { sampleData } from '../sampleData';
+import DataLoader, { data } from './DataLoader';
+import Layout from './Layout';
 
 export default class GlobalState {
   private static instance: GlobalState | null = null;
   public layout: Layout;
+  public dataLoader: DataLoader;
   public scaleLevel: number = 4;
   public numBarsOnView: number;
-  public sampleData: data[] = sampleData;
   public dataOnView: data[];
   public offsetCount: number = 0;
   public barWidth: number = 0;
@@ -25,8 +26,7 @@ export default class GlobalState {
       );
     }
 
-    this.layout = new Layout();
-    this.updateState();
+    this.init();
   }
 
   public static getInstance(): GlobalState {
@@ -34,6 +34,13 @@ export default class GlobalState {
       GlobalState.instance = new GlobalState();
     }
     return GlobalState.instance;
+  }
+
+  private init(): void {
+    this.layout = new Layout();
+    this.dataLoader = new DataLoader();
+    this.dataLoader.dataProcess(sampleData);
+    this.updateState();
   }
 
   public updateLayout(canvasWidth: number, canvasHeight: number) {
@@ -54,7 +61,7 @@ export default class GlobalState {
   }
 
   public updateDataOnView(): void {
-    this.dataOnView = this.sampleData.slice(
+    this.dataOnView = this.dataLoader.dataList.slice(
       Math.max(this.offsetCount, 0),
       this.offsetCount + this.numBarsOnView
     );
@@ -103,7 +110,7 @@ export default class GlobalState {
   public mouseMove(offsetCount: number): void {
     this.offsetCount = Math.min(
       Math.max(offsetCount, 3 - this.numBarsOnView),
-      this.sampleData.length - this.numBarsOnView + 3
+      this.dataLoader.dataList.length - this.numBarsOnView + 3
     );
     this.updateDataOnView();
   }

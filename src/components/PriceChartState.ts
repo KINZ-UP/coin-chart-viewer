@@ -1,10 +1,9 @@
-import { data } from '../sampleData';
 import GlobalState from './GlobalState';
+import { data } from './DataLoader';
 
 export default class PriceChartState {
   public static instance: PriceChartState | null = null;
   globalState: GlobalState;
-  dataOnView: data[];
   public maxPriceOnView: number;
   public minPriceOnView: number;
   public minMaxDiff: number;
@@ -30,7 +29,11 @@ export default class PriceChartState {
   public calcMaxPrice(): number {
     return this.globalState.dataOnView.reduce(
       (maxPrice: number, data: data) => {
-        return Math.max(maxPrice, data.high_price);
+        return Math.max(
+          maxPrice,
+          data.highPrice,
+          ...Object.values(data.movingAverages).map((value) => value || 0)
+        );
       },
       0
     );
@@ -39,7 +42,13 @@ export default class PriceChartState {
   public calcMinPrice(): number {
     return this.globalState.dataOnView.reduce(
       (minPrice: number, data: data) => {
-        return Math.min(minPrice, data.low_price);
+        return Math.min(
+          minPrice,
+          data.lowPrice,
+          ...Object.values(data.movingAverages).map(
+            (value) => value || Infinity
+          )
+        );
       },
       Infinity
     );
@@ -47,5 +56,13 @@ export default class PriceChartState {
 
   private calcMinMaxDiff(): number {
     return this.maxPriceOnView - this.minPriceOnView;
+  }
+
+  public scaleHeight(value: number): number {
+    return (
+      ((this.maxPriceOnView - value) / this.minMaxDiff) *
+        this.globalState.layout.upper.height +
+      this.globalState.layout.upper.margin.top
+    );
   }
 }

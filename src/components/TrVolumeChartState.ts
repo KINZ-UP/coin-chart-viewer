@@ -1,10 +1,9 @@
-import { data } from '../sampleData';
 import GlobalState from './GlobalState';
+import { data } from './DataLoader';
 
 export default class TrVolumnChartState {
   public static instance: TrVolumnChartState | null = null;
   globalState: GlobalState;
-  dataOnView: data[];
   public maxTrVolumeOnView: number;
 
   private constructor() {
@@ -26,9 +25,23 @@ export default class TrVolumnChartState {
   public calcMaxTrVolume(): number {
     return this.globalState.dataOnView.reduce(
       (maxTrVolume: number, data: data) => {
-        return Math.max(maxTrVolume, data.candle_acc_trade_volume);
+        return Math.max(maxTrVolume, data.tradeVolume);
       },
       0
+    );
+  }
+
+  public scaleHeight(value: number): number {
+    return (
+      (value / this.maxTrVolumeOnView) * this.globalState.layout.lower.height
+    );
+  }
+
+  public calcPosY(height: number): number {
+    return (
+      this.globalState.layout.lower.height -
+      height +
+      this.globalState.layout.lower.margin.top
     );
   }
 }

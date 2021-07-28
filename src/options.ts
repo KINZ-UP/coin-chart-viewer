@@ -64,6 +64,19 @@ const options = {
   outline: {
     strokeStyle: '#e0e0e0',
   },
+  dataProperties: {
+    openPrice: 'opening_price' as const,
+    closePrice: 'trade_price' as const,
+    highPrice: 'high_price' as const,
+    lowPrice: 'low_price' as const,
+    tradeVolume: 'candle_acc_trade_volume' as const,
+    dateTime: 'candle_date_time_kst' as const,
+  },
+  movingAverageList: [
+    { interval: 5, color: 'green' },
+    { interval: 10, color: 'orange' },
+    { interval: 20, color: 'gray' },
+  ],
 };
 
 export default options;
