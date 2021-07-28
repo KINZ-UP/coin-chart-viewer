@@ -24,7 +24,7 @@ export default class XAxis {
       .map((_, i) => Math.round(((2 * i + 1) / (2 * n)) * l));
 
     this.labels = this.labelIdxs.map((idx) => {
-      const dateTime = this.globalState.dataOnView[idx]?.candle_date_time_kst;
+      const dateTime = this.globalState.dataOnView[idx]?.dateTime;
       return dateTime ? getDateString(new Date(dateTime)) : '';
     });
 
