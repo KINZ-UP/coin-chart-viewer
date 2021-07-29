@@ -47,7 +47,7 @@ const options = {
     maxFontSize: 12,
     minFontSize: 8,
     fontSizeRatio: 0.03,
-    leftPadding: 12,
+    leftPadding: 7,
   },
   xAxis: {
     fillStyle: '#333',
@@ -77,6 +77,9 @@ const options = {
     { interval: 10, color: 'orange' },
     { interval: 20, color: 'gray' },
   ],
+  pointerGrid: {
+    color: '#999',
+  },
 };
 
 export default options;

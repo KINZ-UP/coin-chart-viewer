@@ -22,6 +22,7 @@ export default class TrVolumeChartYTick {
   public draw(): void {
     if (!this.ctx) return;
     const { fillStyle, leftPadding, fontFamily } = options.yAxis;
+    const { layout } = this.state.globalState;
 
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
@@ -33,7 +34,7 @@ export default class TrVolumeChartYTick {
       const scaledCurrTick = this.yScale(currY);
       this.ctx.fillText(
         currY.toLocaleString(),
-        this.state.globalState.layout.width + leftPadding,
+        layout.global.margin.left + layout.width + leftPadding,
         scaledCurrTick
       );
 
