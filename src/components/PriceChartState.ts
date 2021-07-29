@@ -65,4 +65,11 @@ export default class PriceChartState {
       this.globalState.layout.upper.margin.top
     );
   }
+
+  public inverseScaleHeight(height: number): number {
+    return (
+      this.maxPriceOnView -
+      (height * this.minMaxDiff) / this.globalState.layout.upper.height
+    );
+  }
 }

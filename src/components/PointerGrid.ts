@@ -2,6 +2,7 @@ import strokeLine from '../lib/strokeLine';
 import options from '../options';
 import GlobalState from './GlobalState';
 import PriceChartState from './PriceChartState';
+import PriceMarker from './PriceMarker';
 import TrVolumnChartState from './TrVolumeChartState';
 
 export default class PointerGrid {
@@ -9,11 +10,15 @@ export default class PointerGrid {
   public priceChartState: PriceChartState = PriceChartState.getInstance();
   public trVolumeChartState: TrVolumnChartState =
     TrVolumnChartState.getInstance();
+  public priceMarker: PriceMarker;
 
-  constructor(public ctx: CanvasRenderingContext2D) {}
+  constructor(public ctx: CanvasRenderingContext2D) {
+    this.priceMarker = new PriceMarker(this.ctx);
+  }
 
   public update() {
     this.draw();
+    this.priceMarker.update();
   }
 
   private draw() {

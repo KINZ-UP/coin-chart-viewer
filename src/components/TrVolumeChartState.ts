@@ -44,4 +44,10 @@ export default class TrVolumnChartState {
       this.globalState.layout.lower.margin.top
     );
   }
+
+  public inverseScaleHeight(height: number): number {
+    return (
+      (height * this.maxTrVolumeOnView) / this.globalState.layout.lower.height
+    );
+  }
 }

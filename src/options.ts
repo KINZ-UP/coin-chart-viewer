@@ -80,6 +80,13 @@ const options = {
   pointerGrid: {
     color: '#999',
   },
+  pointerPriceMarker: {
+    color: {
+      background: '#000',
+      font: '#fff',
+    },
+    height: 20,
+  },
 };
 
 export default options;
