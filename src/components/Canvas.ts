@@ -4,9 +4,9 @@ import GlobalState from './GlobalState';
 import TrVolumeChart from './TrVolumeChart';
 import debounce from '../lib/debounce';
 import XAxis from './XAxis';
-import Outlines from './Outlines';
 import formatDatetimeReqStr from '../lib/formatDatetimeReqStr';
 import Wrappers from './Wrappers';
+import PointerGrid from './PointerGrid';
 
 export default class Canvas {
   public canvas: HTMLCanvasElement;
@@ -15,7 +15,7 @@ export default class Canvas {
   public priceChart: PriceChart;
   public trVolumeChart: TrVolumeChart;
   public xAxis: XAxis;
-  public outlines: Outlines;
+  public pointerGrid: PointerGrid;
   public globalState: GlobalState;
   public btnWrapper: HTMLElement | null;
 
@@ -55,6 +55,7 @@ export default class Canvas {
 
     this.globalState.updateLayout(this.canvas.width, this.canvas.height);
     this.wrappers.resize();
+    this.globalState.updateChartBound(this.wrappers.inner);
 
     this.update();
   }
@@ -64,7 +65,7 @@ export default class Canvas {
     this.priceChart = new PriceChart(this.ctx);
     this.trVolumeChart = new TrVolumeChart(this.ctx);
     this.xAxis = new XAxis(this.ctx);
-    // this.outlines = new Outlines(this.ctx);
+    this.pointerGrid = new PointerGrid(this.ctx);
     this.initFetch();
   }
 
@@ -84,6 +85,14 @@ export default class Canvas {
     // this.outlines.update();
   }
 
+  private updateGrid(): void {
+    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.xAxis.update();
+    this.priceChart.update();
+    this.trVolumeChart.update();
+    this.pointerGrid.update();
+  }
+
   private updateLayout(): void {
     this.globalState.updateLayout(this.canvas.width, this.canvas.height);
   }
@@ -98,8 +107,18 @@ export default class Canvas {
     this.wrappers.zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
     this.wrappers.zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
 
-    this.canvas.addEventListener('mousedown', this.mouseDown.bind(this));
-    this.canvas.addEventListener('mousemove', this.mouseMove.apply(this));
+    this.wrappers.inner.addEventListener(
+      'mousedown',
+      this.mouseDown.bind(this)
+    );
+    this.wrappers.inner.addEventListener(
+      'mousemove',
+      this.mouseMove.apply(this)
+    );
+    this.wrappers.inner.addEventListener(
+      'mouseleave',
+      this.mouseLeave.bind(this)
+    );
     window.addEventListener('mouseup', this.mouseUp.bind(this));
   }
 
@@ -121,7 +140,11 @@ export default class Canvas {
 
   private mouseMove(): (e: MouseEvent) => void {
     return (e: MouseEvent) => {
-      if (!this.isMouseDown) return;
+      this.globalState.updatePointer({ x: e.clientX, y: e.clientY });
+      if (!this.isMouseDown) {
+        this.updateGrid();
+        return;
+      }
       const mouseMoveX = e.clientX - this.mouseMoveStartPosX;
       this.globalState.mouseMove(
         this.offsetCountStart +
@@ -130,6 +153,11 @@ export default class Canvas {
       this.update();
       this.onNeedMoreData();
     };
+  }
+
+  private mouseLeave(e: MouseEvent): void {
+    this.globalState.updatePointer({ x: null, y: null });
+    this.updateGrid();
   }
 
   private async onNeedMoreData(): Promise<void> {

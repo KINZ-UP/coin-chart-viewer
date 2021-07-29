@@ -2,6 +2,8 @@ import options from '../options';
 import DataLoader, { data } from './DataLoader';
 import Layout from './Layout';
 
+type Pointer = { x: number | null; y: number | null };
+
 export default class GlobalState {
   private static instance: GlobalState | null = null;
   public layout: Layout;
@@ -15,6 +17,8 @@ export default class GlobalState {
   public posXCenterByIdx: number[] = [];
   public fontSize: { xAxis: number; yAxis: number } = { xAxis: 10, yAxis: 10 };
   public loading: boolean = false;
+  public chartBoundingRect: { left: number; top: number } = { left: 0, top: 0 };
+  public pointer: Pointer = { x: null, y: null };
 
   private constructor() {
     if (
@@ -104,6 +108,15 @@ export default class GlobalState {
     if (this.scaleLevel >= options.numBarsOnViewList.length - 1) return;
     this.scaleLevel += 1;
     this.updateState();
+  }
+
+  public updateChartBound(boundingElem: HTMLElement) {
+    this.chartBoundingRect = boundingElem.getBoundingClientRect();
+  }
+
+  public updatePointer({ x, y }: Pointer) {
+    this.pointer.x = x ? x - this.chartBoundingRect.left : null;
+    this.pointer.y = y ? y - this.chartBoundingRect.top : null;
   }
 
   public mouseMove(offsetCount: number): void {

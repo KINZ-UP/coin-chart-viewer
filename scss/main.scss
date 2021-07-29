@@ -12,7 +12,7 @@ body {
   justify-content: center;
   height: 100vh;
 
-  #canvas-outer-container {
+  #canvas-outer-wrapper {
     position: relative;
     border: 1px solid #aaa;
 
@@ -20,24 +20,27 @@ body {
       position: relative;
     }
 
-    div.inner-container {
+    #canvas-inner-wrapper {
       position: absolute;
-      z-index: -1;
+    }
 
-      &#upper-chart-container {
-        background: hsla(60, 60%, 88%, 0.1);
-        outline: 1px solid #aaa;
-      }
-      &#lower-chart-container {
-        background: hsla(90, 50%, 88%, 0.2);
-        outline: 1px solid #aaa;
-      }
+    .section-wrapper {
+      position: absolute;
+    }
+
+    #upper-chart-wrapper {
+      background: hsla(60, 60%, 88%, 0.1);
+      outline: 1px solid #aaa;
+    }
+    #lower-chart-wrapper {
+      background: hsla(90, 50%, 88%, 0.2);
+      outline: 1px solid #aaa;
     }
 
     #button-wrapper {
       position: absolute;
       display: flex;
-      z-index: 1;
+      // z-index: 2;
       transform: translate(50%, 50%);
 
       button {

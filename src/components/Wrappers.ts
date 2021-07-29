@@ -2,6 +2,7 @@ import GlobalState from './GlobalState';
 
 export default class Wrappers {
   public outer: HTMLElement = document.createElement('div');
+  public inner: HTMLElement = document.createElement('div');
   public upper: HTMLElement = document.createElement('div');
   public lower: HTMLElement = document.createElement('div');
   public gap: HTMLElement = document.createElement('div');
@@ -14,10 +15,11 @@ export default class Wrappers {
   constructor(public canvas: HTMLCanvasElement) {
     const body = document.body;
 
-    this.outer.id = 'canvas-outer-container';
-    this.upper.id = 'upper-chart-container';
-    this.lower.id = 'lower-chart-container';
-    this.gap.id = 'gap-container';
+    this.outer.id = 'canvas-outer-wrapper';
+    this.inner.id = 'canvas-inner-wrapper';
+    this.upper.id = 'upper-chart-wrapper';
+    this.lower.id = 'lower-chart-wrapper';
+    this.gap.id = 'gap-wrapper';
 
     this.buttonWrapper.id = 'button-wrapper';
     this.zoomInBtn.id = 'zoom-in';
@@ -25,13 +27,14 @@ export default class Wrappers {
     this.buttonWrapper.appendChild(this.zoomInBtn);
     this.buttonWrapper.appendChild(this.zoomOutBtn);
 
-    this.upper.classList.add('inner-container');
-    this.lower.classList.add('inner-container');
-    this.gap.classList.add('inner-container');
+    this.upper.classList.add('section-wrapper');
+    this.lower.classList.add('section-wrapper');
+    this.gap.classList.add('section-wrapper');
 
-    this.outer.appendChild(this.canvas);
     this.outer.appendChild(this.upper);
     this.outer.appendChild(this.lower);
+    this.outer.appendChild(this.canvas);
+    this.outer.appendChild(this.inner);
     this.outer.appendChild(this.gap);
     this.outer.appendChild(this.buttonWrapper);
 
@@ -43,6 +46,12 @@ export default class Wrappers {
     this.outer.style.height = this.canvas.height + 'px';
 
     const { upper, lower, gap, width } = this.state.layout;
+
+    this.inner.style.top = upper.margin.top + 'px';
+    this.inner.style.left = upper.margin.left + 'px';
+    this.inner.style.right = upper.margin.right + 'px';
+    this.inner.style.bottom = lower.margin.bottom + 'px';
+
     this.upper.style.top = upper.margin.top + 'px';
     this.upper.style.left = upper.margin.left + 'px';
     this.upper.style.right = upper.margin.right + 'px';
