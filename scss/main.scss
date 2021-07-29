@@ -6,18 +6,62 @@ html {
 }
 
 body {
-  background-color: $color--black;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
 
-  canvas {
-    background-color: $color--white;
-  }
-  h1 {
-    color: $color--white;
-    display: flex;
+  #canvas-outer-container {
+    position: relative;
+    border: 1px solid #aaa;
+
+    canvas {
+      position: relative;
+    }
+
+    div.inner-container {
+      position: absolute;
+      z-index: -1;
+
+      &#upper-chart-container {
+        background: hsla(60, 60%, 88%, 0.1);
+        outline: 1px solid #aaa;
+      }
+      &#lower-chart-container {
+        background: hsla(90, 50%, 88%, 0.2);
+        outline: 1px solid #aaa;
+      }
+    }
+
+    #button-wrapper {
+      position: absolute;
+      display: flex;
+      z-index: 1;
+      transform: translate(50%, 50%);
+
+      button {
+        color: white;
+        border: 1px solid hsl(160, 40%, 28%);
+        outline: none;
+        background-color: hsla(160, 50%, 43%);
+        width: min(27px, 10.8vw);
+        height: min(25px, 10vw);
+        opacity: 0.6;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+
+      button#zoom-in {
+        background-image: url('../src/assets/Plus.svg');
+      }
+      button#zoom-out {
+        background-image: url('../src/assets/Minus.svg');
+      }
+      button + button {
+        margin-left: 5px;
+      }
+    }
   }
 }

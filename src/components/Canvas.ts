@@ -6,28 +6,33 @@ import debounce from '../lib/debounce';
 import XAxis from './XAxis';
 import Outlines from './Outlines';
 import formatDatetimeReqStr from '../lib/formatDatetimeReqStr';
+import Wrappers from './Wrappers';
 
 export default class Canvas {
-  private _canvas: HTMLCanvasElement;
+  public canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null;
+  public wrappers: Wrappers;
   public priceChart: PriceChart;
   public trVolumeChart: TrVolumeChart;
   public xAxis: XAxis;
   public outlines: Outlines;
   public globalState: GlobalState;
+  public btnWrapper: HTMLElement | null;
 
   public isMouseDown: boolean = false;
   private mouseMoveStartPosX: number = 0;
   private offsetCountStart: number = 0;
 
   constructor(private canvasWidth: number, private canvasHeight: number) {
-    this._canvas = document.createElement('canvas');
-    const body = document.querySelector('body');
-    body?.appendChild(this._canvas);
+    this.canvas = document.createElement('canvas');
 
-    this._canvas.width = canvasWidth;
-    this._canvas.height = canvasHeight;
-    this.ctx = this._canvas.getContext('2d');
+    this.wrappers = new Wrappers(this.canvas);
+
+    this.btnWrapper = document.getElementById('button-wrapper');
+
+    this.canvas.width = canvasWidth;
+    this.canvas.height = canvasHeight;
+    this.ctx = this.canvas.getContext('2d');
 
     this.globalState = GlobalState.getInstance();
 
@@ -36,20 +41,21 @@ export default class Canvas {
     this.assignEvents();
   }
 
-  public get canvas() {
-    return this._canvas;
-  }
-
   private resize(): void {
     const clientWidth = window.innerWidth;
     this.canvas.width = Math.min(this.canvasWidth, clientWidth);
     this.canvas.height = this.canvasHeight;
+
     if (options.geoConfiguration.maxAspectRatio) {
       this.canvas.height = Math.min(
         this.canvasHeight,
         clientWidth * options.geoConfiguration.maxAspectRatio
       );
     }
+
+    this.globalState.updateLayout(this.canvas.width, this.canvas.height);
+    this.wrappers.resize();
+
     this.update();
   }
 
@@ -58,7 +64,7 @@ export default class Canvas {
     this.priceChart = new PriceChart(this.ctx);
     this.trVolumeChart = new TrVolumeChart(this.ctx);
     this.xAxis = new XAxis(this.ctx);
-    this.outlines = new Outlines(this.ctx);
+    // this.outlines = new Outlines(this.ctx);
     this.initFetch();
   }
 
@@ -75,11 +81,11 @@ export default class Canvas {
     this.xAxis.update();
     this.priceChart.update();
     this.trVolumeChart.update();
-    this.outlines.update();
+    // this.outlines.update();
   }
 
   private updateLayout(): void {
-    this.globalState.updateLayout(this._canvas.width, this._canvas.height);
+    this.globalState.updateLayout(this.canvas.width, this.canvas.height);
   }
 
   private updateState(): void {
@@ -89,14 +95,11 @@ export default class Canvas {
   private assignEvents(): void {
     window.addEventListener('resize', debounce(this.resize.bind(this), 100));
 
-    const zoomInBtn = document.getElementById('zoom-in');
-    zoomInBtn?.addEventListener('click', this.zoomIn.bind(this));
+    this.wrappers.zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
+    this.wrappers.zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
 
-    const zoomOutBtn = document.getElementById('zoom-out');
-    zoomOutBtn?.addEventListener('click', this.zoomOut.bind(this));
-
-    this._canvas.addEventListener('mousedown', this.mouseDown.bind(this));
-    this._canvas.addEventListener('mousemove', this.mouseMove.apply(this));
+    this.canvas.addEventListener('mousedown', this.mouseDown.bind(this));
+    this.canvas.addEventListener('mousemove', this.mouseMove.apply(this));
     window.addEventListener('mouseup', this.mouseUp.bind(this));
   }
 

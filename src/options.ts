@@ -11,7 +11,7 @@ const options = {
         top: 0,
         left: 0,
         bottom: 0,
-        right: 50,
+        right: 60,
       },
       max: {
         top: 20,
@@ -20,7 +20,7 @@ const options = {
         right: 80,
       },
     },
-    gapRatio: 0.02,
+    gapRatio: 0.07,
     upperHeightRatio: 0.7,
     maxAspectRatio: 2,
   },

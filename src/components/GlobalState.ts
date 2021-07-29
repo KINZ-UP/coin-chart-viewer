@@ -40,7 +40,6 @@ export default class GlobalState {
 
   public async init(): Promise<void> {
     await this.dataLoader.init();
-    this.updateState();
   }
 
   public updateLayout(canvasWidth: number, canvasHeight: number) {
