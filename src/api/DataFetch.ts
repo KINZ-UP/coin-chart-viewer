@@ -1,3 +1,6 @@
+import store from '../store';
+import Subscriber from '../store/Subscriber';
+
 type dataQuery = {
   market: string;
   count?: number;
@@ -5,12 +8,13 @@ type dataQuery = {
 };
 
 export default class DataFetch {
-  private baseURL: string = 'http://localhost:9000/upbit';
+  private static baseURL: string = 'http://localhost:9000/upbit';
   constructor() {}
 
   private setURL({ market, count, to }: dataQuery) {
     return (
-      this.baseURL + `?market=${market}&count=${count || 10}&to=${to || ''}`
+      DataFetch.baseURL +
+      `?market=${market}&count=${count || 10}&to=${to || ''}`
     );
   }
 
@@ -18,7 +22,13 @@ export default class DataFetch {
     const url = this.setURL({ market, count, to });
     const resp = await fetch(url);
     const data = await resp.json();
+    return data;
+  }
 
+  public static async getMarketList() {
+    const url = DataFetch.baseURL + '/list';
+    const resp = await fetch(url);
+    const data = await resp.json();
     return data;
   }
 }

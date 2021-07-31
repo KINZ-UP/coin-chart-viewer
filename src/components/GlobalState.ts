@@ -31,8 +31,6 @@ export default class GlobalState {
     }
     this.layout = new Layout();
     this.dataLoader = new DataLoader();
-
-    // this.init();
   }
 
   public static getInstance(): GlobalState {
@@ -42,8 +40,8 @@ export default class GlobalState {
     return GlobalState.instance;
   }
 
-  public async init(): Promise<void> {
-    await this.dataLoader.init();
+  public async init(market: string): Promise<void> {
+    await this.dataLoader.init(market);
   }
 
   public updateLayout(canvasWidth: number, canvasHeight: number) {

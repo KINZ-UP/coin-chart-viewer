@@ -7,8 +7,10 @@ import XAxis from './XAxis';
 import formatDatetimeReqStr from '../lib/formatDatetimeReqStr';
 import Wrappers from './Wrappers';
 import PointerGrid from './PointerGrid';
+import Subscriber from '../store/Subscriber';
+import { State } from '../store';
 
-export default class Canvas {
+export default class Canvas extends Subscriber {
   public canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D | null;
   public wrappers: Wrappers;
@@ -24,10 +26,10 @@ export default class Canvas {
   private offsetCountStart: number = 0;
 
   constructor(private canvasWidth: number, private canvasHeight: number) {
+    super();
+
     this.canvas = document.createElement('canvas');
-
     this.wrappers = new Wrappers(this.canvas);
-
     this.btnWrapper = document.getElementById('button-wrapper');
 
     this.canvas.width = canvasWidth;
@@ -69,15 +71,23 @@ export default class Canvas {
     this.initFetch();
   }
 
+  public async updateState(state: State) {
+    if (this.state.market !== state.market) {
+      await this.globalState.init(state.market);
+      this.update();
+    }
+    this.state = state;
+  }
+
   private async initFetch(): Promise<void> {
-    await this.globalState.init();
+    await this.globalState.init(this.state.market);
     this.update();
   }
 
   private update(): void {
     this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.updateLayout();
-    this.updateState();
+    this.updateGlobalState();
 
     this.xAxis.update();
     this.priceChart.update();
@@ -97,7 +107,7 @@ export default class Canvas {
     this.globalState.updateLayout(this.canvas.width, this.canvas.height);
   }
 
-  private updateState(): void {
+  private updateGlobalState(): void {
     this.globalState.updateState();
   }
 
@@ -174,6 +184,7 @@ export default class Canvas {
 
     this.globalState.loading = true;
     await this.globalState.dataLoader.fetchMore(
+      this.state.market,
       formatDatetimeReqStr(dataList[dataList.length - 1].dateTime)
     );
     this.update();

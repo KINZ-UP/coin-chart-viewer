@@ -1,5 +1,7 @@
-import DataFetch from './api/DataFetch';
+import Subscriber from '../store/Subscriber';
+import DataFetch from '../api/DataFetch';
 import options from '../options';
+import { State } from '../store';
 
 export type data = {
   openPrice: number;
@@ -39,6 +41,7 @@ export default class DataLoader {
     lowPrice: 0,
     tradeVolume: 0,
     dateTime: new Date(),
+
     // movingAverages: {5: null, 10: null}
     movingAverages: options.movingAverageList.reduce(
       (defaultMA, elem) => Object.assign(defaultMA, { [elem.interval]: null }),
@@ -50,24 +53,25 @@ export default class DataLoader {
     this.dataFetch = new DataFetch();
   }
 
-  async init() {
+  async init(market: string) {
+    this.dataList = [];
     const rawData = await this.dataFetch.fetchData({
-      market: 'KRW-BTC',
+      market,
       count: 100,
     });
     this.dataProcess(rawData);
   }
 
-  public async fetchMore(to: string): Promise<void> {
+  public async fetchMore(market: string, to: string): Promise<void> {
     try {
       const rawData = await this.dataFetch.fetchData({
-        market: 'KRW-BTC',
+        market,
         count: 50,
         to,
       });
       this.dataProcess(rawData);
     } catch (e) {
-      // console.dir(e);
+      console.log(e);
     }
   }
 
@@ -78,7 +82,6 @@ export default class DataLoader {
   public dataProcess(newData: rawData[]): void {
     this.rawDataList = this.rawDataList.concat(newData);
     newData.forEach(this.addNewData.bind(this));
-    console.log(newData);
   }
 
   private addNewData(rawData: rawData): void {

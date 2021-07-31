@@ -1,3 +1,4 @@
+import App from './App';
 import Canvas from './components/Canvas';
 
-const canvas = new Canvas(800, 600);
+const app = new App();
