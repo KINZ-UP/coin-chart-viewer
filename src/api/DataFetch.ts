@@ -1,6 +1,3 @@
-import store from '../store';
-import Subscriber from '../store/Subscriber';
-
 type dataQuery = {
   market: string;
   count?: number;
