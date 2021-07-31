@@ -24,6 +24,7 @@ export default class TrVolumeChartYTick {
     const { fillStyle, leftPadding, fontFamily } = options.yAxis;
     const { layout } = this.state.globalState;
 
+    const formatTick = getformatTickFunc(this.tickScale.tickSpacing);
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
     this.ctx.fillStyle = fillStyle;
@@ -33,7 +34,7 @@ export default class TrVolumeChartYTick {
     while (currY <= this.state.maxTrVolumeOnView) {
       const scaledCurrTick = this.yScale(currY);
       this.ctx.fillText(
-        currY.toLocaleString(),
+        formatTick(currY),
         layout.global.margin.left + layout.width + leftPadding,
         scaledCurrTick
       );
@@ -66,4 +67,24 @@ export default class TrVolumeChartYTick {
       this.state.globalState.layout.lower.margin.top
     );
   }
+}
+
+function getformatTickFunc(spacing: number): (num: number) => string {
+  const digit = Math.log10(spacing) / 3;
+
+  let divisor = 1;
+  let unit = '';
+  if (digit >= 3) {
+    divisor = 10 ** 9;
+    unit = 'G';
+  } else if (digit >= 2) {
+    divisor = 10 ** 6;
+    unit = 'M';
+  } else if (digit >= 1) {
+    divisor = 10 ** 3;
+    unit = 'K';
+  }
+
+  return (num: number) =>
+    num === 0 ? '0' : (num / divisor).toLocaleString() + unit;
 }
