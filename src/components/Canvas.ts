@@ -143,6 +143,7 @@ export default class Canvas extends Subscriber {
   private zoomOut(): void {
     this.globalState.zoomOut();
     this.update();
+    this.onNeedMoreData();
   }
 
   private swipe(e: Touch | MouseEvent) {
