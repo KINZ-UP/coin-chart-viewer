@@ -42,6 +42,7 @@ export default class GlobalState {
 
   public async init(market: string): Promise<void> {
     await this.dataLoader.init(market);
+    this.offsetCount = 0;
   }
 
   public updateLayout(canvasWidth: number, canvasHeight: number) {
@@ -91,7 +92,10 @@ export default class GlobalState {
       const { maxFontSize, minFontSize, fontSizeRatio } = options[loc];
       this.fontSize[loc] = Math.max(
         minFontSize,
-        Math.min(maxFontSize, window.innerWidth * fontSizeRatio)
+        Math.min(
+          maxFontSize,
+          document.documentElement.clientWidth * fontSizeRatio
+        )
       );
     });
   }
