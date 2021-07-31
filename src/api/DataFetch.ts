@@ -8,7 +8,7 @@ type dataQuery = {
 };
 
 export default class DataFetch {
-  private static baseURL: string = 'http://localhost:9000/upbit';
+  private static baseURL: string | undefined = process.env.BASE_URL;
   constructor() {}
 
   private setURL({ market, count, to }: dataQuery) {
