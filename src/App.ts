@@ -2,7 +2,7 @@ import DataFetch from './api/DataFetch';
 import Canvas from './components/Canvas';
 import Header from './components/Header';
 import store from './store';
-import { changeMarket, updateMarketList } from './store/reducer';
+import { updateMarketList } from './store/reducer';
 import Subscriber from './store/Subscriber';
 
 export type Market = {
