@@ -4,6 +4,7 @@ $color--white: #fff;
 html {
   box-sizing: border-box;
   font-family: 'Noto Sans KR', sans-serif;
+  font-size: min(16px, 5vw);
 }
 
 h1 {
