@@ -5,7 +5,11 @@ type dataQuery = {
 };
 
 export default class DataFetch {
-  private static baseURL: string | undefined = process.env.BASE_URL;
+  private static baseURL: string | undefined =
+    process.env.NODE_ENV === 'development'
+      ? process.env.BASE_URL_DEV
+      : process.env.BASE_URL_PRO;
+
   constructor() {}
 
   private setURL({ market, count, to }: dataQuery) {
