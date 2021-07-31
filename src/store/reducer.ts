@@ -22,7 +22,7 @@ export const initialState: state = {
   market: {
     market: 'KRW-BTC',
     korean_name: '비트코인',
-    english_name: 'BITCOIN',
+    english_name: 'Bitcoin',
   },
   marketList: [],
 };
