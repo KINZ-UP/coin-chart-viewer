@@ -3,6 +3,13 @@ $color--white: #fff;
 
 html {
   box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #222;
+  font-weight: 700;
 }
 
 body {
@@ -10,60 +17,109 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100vw;
   height: 100vh;
 
-  #canvas-outer-wrapper {
-    position: relative;
-    border: 1px solid #aaa;
-
-    canvas {
-      position: relative;
-    }
-
-    #canvas-inner-wrapper {
-      position: absolute;
-    }
-
-    .section-wrapper {
-      position: absolute;
-    }
-
-    #upper-chart-wrapper {
-      background: hsla(60, 60%, 88%, 0.1);
-      outline: 1px solid #aaa;
-    }
-    #lower-chart-wrapper {
-      background: hsla(90, 50%, 88%, 0.2);
-      outline: 1px solid #aaa;
-    }
-
-    #button-wrapper {
-      position: absolute;
+  #root {
+    header {
       display: flex;
-      // z-index: 2;
-      transform: translate(50%, 50%);
+      align-items: flex-end;
+      margin-bottom: 1rem;
+      position: relative;
+      > h1 {
+        margin-right: 0.5rem;
+        max-width: calc(100vw - 3rem);
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-      button {
-        color: white;
-        border: 1px solid hsl(160, 40%, 28%);
-        outline: none;
-        background-color: hsla(160, 50%, 43%);
-        width: min(27px, 10.8vw);
-        height: min(25px, 10vw);
-        opacity: 0.6;
-        background-repeat: no-repeat;
+      > button {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+
+        background: url('/src/assets/ArrowDownFill.svg');
         background-position: center;
-        background-size: contain;
+        background-repeat: no-repeat;
       }
 
-      button#zoom-in {
-        background-image: url('../src/assets/Plus.svg');
+      ul#market-list {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+
+        position: absolute;
+        top: 3rem;
+        left: 0;
+        height: 10rem;
+        overflow-y: scroll;
+        z-index: 1;
+
+        li {
+          display: flex;
+          align-items: center;
+          height: 2rem;
+          padding: 0 0.5rem;
+
+          &.on-hover {
+            background: #222;
+            color: #fff;
+          }
+        }
       }
-      button#zoom-out {
-        background-image: url('../src/assets/Minus.svg');
+    }
+    #canvas-outer-wrapper {
+      position: relative;
+      border: 1px solid #aaa;
+
+      canvas {
+        position: relative;
       }
-      button + button {
-        margin-left: 5px;
+
+      #canvas-inner-wrapper {
+        position: absolute;
+      }
+
+      .section-wrapper {
+        position: absolute;
+      }
+
+      #upper-chart-wrapper {
+        background: hsla(60, 60%, 88%, 0.1);
+        outline: 1px solid #aaa;
+      }
+      #lower-chart-wrapper {
+        background: hsla(90, 50%, 88%, 0.2);
+        outline: 1px solid #aaa;
+      }
+
+      #button-wrapper {
+        position: absolute;
+        display: flex;
+        transform: translate(50%, 50%);
+
+        button {
+          color: white;
+          border: 1px solid hsl(160, 40%, 28%);
+          outline: none;
+          background-color: hsla(160, 50%, 43%);
+          width: min(27px, 10.8vw);
+          height: min(25px, 10vw);
+          opacity: 0.6;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+        }
+
+        button#zoom-in {
+          background-image: url('../src/assets/Plus.svg');
+        }
+        button#zoom-out {
+          background-image: url('../src/assets/Minus.svg');
+        }
+        button + button {
+          margin-left: 5px;
+        }
       }
     }
   }

@@ -72,15 +72,15 @@ export default class Canvas extends Subscriber {
   }
 
   public async updateState(state: State) {
-    if (this.state.market !== state.market) {
-      await this.globalState.init(state.market);
+    if (this.state.market.market !== state.market.market) {
+      await this.globalState.init(state.market.market);
       this.update();
     }
     this.state = state;
   }
 
   private async initFetch(): Promise<void> {
-    await this.globalState.init(this.state.market);
+    await this.globalState.init(this.state.market.market);
     this.update();
   }
 
@@ -184,7 +184,7 @@ export default class Canvas extends Subscriber {
 
     this.globalState.loading = true;
     await this.globalState.dataLoader.fetchMore(
-      this.state.market,
+      this.state.market.market,
       formatDatetimeReqStr(dataList[dataList.length - 1].dateTime)
     );
     this.update();

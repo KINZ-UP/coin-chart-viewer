@@ -13,7 +13,7 @@ export default class Wrappers {
   public state: GlobalState = GlobalState.getInstance();
 
   constructor(public canvas: HTMLCanvasElement) {
-    const body = document.body;
+    const root = document.getElementById('root');
 
     this.outer.id = 'canvas-outer-wrapper';
     this.inner.id = 'canvas-inner-wrapper';
@@ -38,7 +38,7 @@ export default class Wrappers {
     this.outer.appendChild(this.gap);
     this.outer.appendChild(this.buttonWrapper);
 
-    body.appendChild(this.outer);
+    root?.appendChild(this.outer);
   }
 
   public resize() {

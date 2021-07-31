@@ -1,7 +1,8 @@
 import DataFetch from './api/DataFetch';
 import Canvas from './components/Canvas';
+import Header from './components/Header';
 import store from './store';
-import { updateMarketList } from './store/reducer';
+import { changeMarket, updateMarketList } from './store/reducer';
 import Subscriber from './store/Subscriber';
 
 export type Market = {
@@ -18,6 +19,7 @@ export default class App extends Subscriber {
   }
 
   private async init() {
+    new Header();
     new Canvas(800, 600);
 
     const fetchedList: Market[] = await DataFetch.getMarketList();

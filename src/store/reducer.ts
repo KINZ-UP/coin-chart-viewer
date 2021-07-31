@@ -2,7 +2,7 @@ import { State, Action } from '../Store';
 import { Market } from '../App';
 
 type state = {
-  market: string;
+  market: Market;
   marketList: Market[];
 };
 
@@ -13,13 +13,17 @@ export const updateMarketList = (list: Market[]) => ({
   type: UPDATE_MARKET_LIST,
   payload: list,
 });
-export const changeMarket = (market: string) => ({
+export const changeMarket = (market: Market) => ({
   type: CHANGE_MARKET,
   payload: market,
 });
 
 export const initialState: state = {
-  market: 'KRW-BTC',
+  market: {
+    market: 'KRW-BTC',
+    korean_name: '비트코인',
+    english_name: 'BITCOIN',
+  },
   marketList: [],
 };
 
