@@ -121,14 +121,17 @@ export default class Canvas extends Subscriber {
       'mousedown',
       this.mouseDown.bind(this)
     );
-    this.wrappers.inner.addEventListener(
-      'mousemove',
-      this.mouseMove.apply(this)
-    );
+    this.wrappers.inner.addEventListener('mousemove', this.mouseMove());
     this.wrappers.inner.addEventListener(
       'mouseleave',
       this.mouseLeave.bind(this)
     );
+    this.wrappers.inner.addEventListener(
+      'touchstart',
+      this.touchStart.bind(this)
+    );
+    this.wrappers.inner.addEventListener('touchmove', this.touchMove());
+    this.wrappers.inner.addEventListener('touchend', this.mouseUp.bind(this));
     window.addEventListener('mouseup', this.mouseUp.bind(this));
   }
 
@@ -142,27 +145,38 @@ export default class Canvas extends Subscriber {
     this.update();
   }
 
+  private swipe(e: Touch | MouseEvent) {
+    this.globalState.updatePointer({ x: e.clientX, y: e.clientY });
+    if (!this.isMouseDown) {
+      this.updateGrid();
+      return;
+    }
+    const mouseMoveX = e.clientX - this.mouseMoveStartPosX;
+    this.globalState.mouseMove(
+      this.offsetCountStart + Math.floor(mouseMoveX / this.globalState.barWidth)
+    );
+    this.update();
+    this.onNeedMoreData();
+  }
+
   private mouseDown(e: MouseEvent): void {
     this.isMouseDown = true;
     this.mouseMoveStartPosX = e.clientX;
     this.offsetCountStart = this.globalState.offsetCount;
   }
 
+  private touchStart(e: TouchEvent): void {
+    this.isMouseDown = true;
+    this.mouseMoveStartPosX = e.changedTouches[0].clientX;
+    this.offsetCountStart = this.globalState.offsetCount;
+  }
+
+  private touchMove(): (e: TouchEvent) => void {
+    return (e: TouchEvent) => this.swipe(e.changedTouches[0]);
+  }
+
   private mouseMove(): (e: MouseEvent) => void {
-    return (e: MouseEvent) => {
-      this.globalState.updatePointer({ x: e.clientX, y: e.clientY });
-      if (!this.isMouseDown) {
-        this.updateGrid();
-        return;
-      }
-      const mouseMoveX = e.clientX - this.mouseMoveStartPosX;
-      this.globalState.mouseMove(
-        this.offsetCountStart +
-          Math.floor(mouseMoveX / this.globalState.barWidth)
-      );
-      this.update();
-      this.onNeedMoreData();
-    };
+    return (e: MouseEvent) => this.swipe(e);
   }
 
   private mouseLeave(e: MouseEvent): void {
