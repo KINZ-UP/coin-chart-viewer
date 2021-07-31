@@ -56,6 +56,10 @@ body {
         overflow-y: scroll;
         z-index: 1;
 
+        &.closed {
+          display: none;
+        }
+
         li {
           display: flex;
           align-items: center;

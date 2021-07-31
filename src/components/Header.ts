@@ -39,17 +39,20 @@ export default class Header extends Subscriber {
   private initButton() {
     this.$showMoreButton.addEventListener('click', () => {
       this.$header.appendChild(this.$marketList);
+      this.$marketList.classList.remove('closed');
+      this.$marketList.focus();
     });
     this.$header.appendChild(this.$showMoreButton);
   }
 
   private closeList() {
-    this.$header.removeChild(this.$marketList);
+    this.$marketList.classList.add('closed');
   }
 
   private initMarketList() {
     this.$marketList.id = 'market-list';
-    this.$marketList.addEventListener('mouseleave', () => this.closeList());
+    this.$marketList.tabIndex = -1;
+    this.$marketList.addEventListener('blur', () => this.closeList());
   }
 
   private renderTitle(market: Market) {
