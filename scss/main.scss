@@ -5,6 +5,7 @@ html {
   box-sizing: border-box;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: min(16px, 5vw);
+  height: 100%;
 }
 
 h1 {
@@ -19,14 +20,15 @@ body {
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 
   #root {
     header {
       display: flex;
       align-items: flex-end;
-      margin-bottom: 1rem;
+      margin: 1rem 0.5rem;
       position: relative;
+      min-height: 3rem;
       > h1 {
         margin-right: 0.5rem;
         max-width: calc(100vw - 3rem);

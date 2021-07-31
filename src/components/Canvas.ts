@@ -44,7 +44,7 @@ export default class Canvas extends Subscriber {
   }
 
   private resize(): void {
-    const clientWidth = window.innerWidth;
+    const clientWidth = document.documentElement.clientWidth;
     this.canvas.width = Math.min(this.canvasWidth, clientWidth);
     this.canvas.height = this.canvasHeight;
 
