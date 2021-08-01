@@ -13,12 +13,14 @@ export default class TrVolumeBar {
     public height: number,
     public isUp: boolean
   ) {
-    (this.baseY =
+    this.baseY =
       this.globalState.layout.canvasHeight -
-      this.globalState.layout.lower.margin.bottom),
-      (this.posX =
-        this.globalState.posXLeftByIdx[idx] +
-        this.globalState.barWidth * config.barPaddingRatio.trVolumeChart);
+      this.globalState.layout.lower.margin.bottom;
+
+    this.posX =
+      this.globalState.posXLeftByIdx[idx] +
+      this.globalState.barWidth * config.barPaddingRatio.trVolumeChart;
+
     this.width =
       this.globalState.barWidth *
       (1 - 2 * config.barPaddingRatio.trVolumeChart);
