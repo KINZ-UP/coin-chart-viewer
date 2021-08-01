@@ -1,3 +1,4 @@
+import scaleRange from '../../lib/scaleRange';
 import strokeLine from '../../lib/strokeLine';
 import options from '../../options';
 import PriceChartState from '../PriceChartState';
@@ -38,7 +39,7 @@ export default class PriceChartYTick {
     let currY = this.getTickStart();
 
     while (currY <= this.state.maxPriceOnView) {
-      const scaledCurrTick = this.yScale(currY);
+      const scaledCurrTick = this.state.scaleY(currY);
       this.ctx.fillText(
         currY.toLocaleString(),
         layout.global.margin.left + layout.width + leftPadding,
@@ -62,13 +63,5 @@ export default class PriceChartYTick {
       currY += this.tickScale.tickSpacing;
     }
     return currY;
-  }
-
-  private yScale(value: number): number {
-    return (
-      ((this.state.maxPriceOnView - value) / this.state.minMaxDiff) *
-        this.state.globalState.layout.upper.height +
-      this.state.globalState.layout.upper.margin.top
-    );
   }
 }

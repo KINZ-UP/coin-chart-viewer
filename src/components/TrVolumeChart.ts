@@ -19,11 +19,14 @@ export default class TrVolumeChart {
 
   private draw() {
     this.yTick.update();
+    const yMin =
+      this.state.globalState.layout.canvasHeight -
+      this.state.globalState.layout.lower.margin.bottom;
     this.barList = this.state.globalState.dataOnView.map((data, idx) => {
-      const height = this.state.scaleHeight(data.tradeVolume);
-      const posY = this.state.calcPosY(height);
+      const yMax = this.state.scaleY(data.tradeVolume);
+      const height = yMax - yMin;
       const isUp = data.openPrice <= data.closePrice;
-      const bar = new TrVolumeBar(this.ctx, idx, posY, height, isUp);
+      const bar = new TrVolumeBar(this.ctx, idx, height, isUp);
 
       bar.draw();
       return bar;

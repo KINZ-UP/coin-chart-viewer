@@ -32,6 +32,6 @@ export default class MovingAverageLine {
   private getScaledMovingAverage(data: data, interval: number): number | null {
     const movingAverage = data.movingAverages[interval];
     if (!movingAverage) return null;
-    return this.state.scaleHeight(movingAverage);
+    return this.state.scaleY(movingAverage);
   }
 }

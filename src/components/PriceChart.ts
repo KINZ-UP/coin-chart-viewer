@@ -23,10 +23,10 @@ export default class PriceChart {
   private draw() {
     this.yTick.update();
     this.candleList = this.state.globalState.dataOnView.map((data, idx) => {
-      const open = this.state.scaleHeight(data.openPrice);
-      const close = this.state.scaleHeight(data.closePrice);
-      const high = this.state.scaleHeight(data.highPrice);
-      const low = this.state.scaleHeight(data.lowPrice);
+      const open = this.state.scaleY(data.openPrice);
+      const close = this.state.scaleY(data.closePrice);
+      const high = this.state.scaleY(data.highPrice);
+      const low = this.state.scaleY(data.lowPrice);
 
       const bodyHeight = close - open;
       const shadowHeight = low - high;

@@ -1,3 +1,4 @@
+import scaleRange from '../../lib/scaleRange';
 import strokeLine from '../../lib/strokeLine';
 import options from '../../options';
 import TrVolumeChartState from '../TrVolumeChartState';
@@ -32,7 +33,7 @@ export default class TrVolumeChartYTick {
     this.ctx.font = `${this.state.globalState.fontSize.yAxis}px ${fontFamily}`;
     let currY = this.getTickStart();
     while (currY <= this.state.maxTrVolumeOnView) {
-      const scaledCurrTick = this.yScale(currY);
+      const scaledCurrTick = this.state.scaleY(currY);
       this.ctx.fillText(
         formatTick(currY),
         layout.global.margin.left + layout.width + leftPadding,
@@ -58,14 +59,6 @@ export default class TrVolumeChartYTick {
       currY += this.tickScale.tickSpacing;
     }
     return currY;
-  }
-
-  private yScale(value: number): number {
-    return (
-      (1 - value / this.state.maxTrVolumeOnView) *
-        this.state.globalState.layout.lower.height +
-      this.state.globalState.layout.lower.margin.top
-    );
   }
 }
 

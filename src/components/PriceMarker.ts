@@ -51,8 +51,10 @@ export default class PriceMarker {
 
     const pointerPrice =
       this.globalState.pointer.y <= layout.upper.height
-        ? this.priceChartState.inverseScaleHeight(this.globalState.pointer.y)
-        : this.trVolumeChartState.inverseScaleHeight(
+        ? this.priceChartState.inverseScaleY(
+            layout.upper.height - this.globalState.pointer.y
+          )
+        : this.trVolumeChartState.inverseScaleY(
             layout.global.height - this.globalState.pointer.y
           );
 

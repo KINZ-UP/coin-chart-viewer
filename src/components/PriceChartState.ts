@@ -1,5 +1,6 @@
 import GlobalState from './GlobalState';
 import { data } from './DataLoader';
+import scaleRange from '../lib/scaleRange';
 
 export default class PriceChartState {
   public static instance: PriceChartState | null = null;
@@ -58,18 +59,27 @@ export default class PriceChartState {
     return this.maxPriceOnView - this.minPriceOnView;
   }
 
-  public scaleHeight(value: number): number {
-    return (
-      ((this.maxPriceOnView - value) / this.minMaxDiff) *
-        this.globalState.layout.upper.height +
-      this.globalState.layout.upper.margin.top
+  public scaleY(value: number): number {
+    const { upper } = this.globalState.layout;
+    const yTop = upper.margin.top;
+    const yBottom = yTop + upper.height;
+
+    return scaleRange(
+      value,
+      this.minPriceOnView,
+      this.maxPriceOnView,
+      yBottom,
+      yTop
     );
   }
 
-  public inverseScaleHeight(height: number): number {
-    return (
-      this.maxPriceOnView -
-      (height * this.minMaxDiff) / this.globalState.layout.upper.height
+  public inverseScaleY(y: number): number {
+    return scaleRange(
+      y,
+      0,
+      this.globalState.layout.upper.height,
+      this.minPriceOnView,
+      this.maxPriceOnView
     );
   }
 }

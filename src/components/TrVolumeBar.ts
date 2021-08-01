@@ -1,24 +1,27 @@
 import options from '../options';
+import GlobalState from './GlobalState';
 import TrVolumnChartState from './TrVolumeChartState';
 
 export default class TrVolumeBar {
-  public state: TrVolumnChartState;
+  public globalState: GlobalState = GlobalState.getInstance();
   public posX: number;
+  public baseY: number;
   public width: number;
 
   constructor(
     public ctx: CanvasRenderingContext2D | null,
     public idx: number,
-    public posY: number,
     public height: number,
     public isUp: boolean
   ) {
-    this.state = TrVolumnChartState.getInstance();
-    this.posX =
-      this.state.globalState.posXLeftByIdx[idx] +
-      this.state.globalState.barWidth * options.barPaddingRatio.trVolumeChart;
+    (this.baseY =
+      this.globalState.layout.canvasHeight -
+      this.globalState.layout.lower.margin.bottom),
+      (this.posX =
+        this.globalState.posXLeftByIdx[idx] +
+        this.globalState.barWidth * options.barPaddingRatio.trVolumeChart);
     this.width =
-      this.state.globalState.barWidth *
+      this.globalState.barWidth *
       (1 - 2 * options.barPaddingRatio.trVolumeChart);
   }
 
@@ -28,6 +31,6 @@ export default class TrVolumeBar {
       ? options.color.bar.up
       : options.color.bar.down;
 
-    this.ctx.fillRect(this.posX, this.posY, this.width, this.height);
+    this.ctx.fillRect(this.posX, this.baseY, this.width, this.height);
   }
 }
