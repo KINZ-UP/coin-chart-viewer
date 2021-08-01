@@ -89,9 +89,9 @@ export default class Canvas extends Subscriber {
     this.updateLayout();
     this.updateGlobalState();
 
+    this.xAxis.update();
     this.priceChart.update();
     this.trVolumeChart.update();
-    this.xAxis.update();
   }
 
   private updateGrid(): void {
