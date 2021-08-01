@@ -1,7 +1,7 @@
-import strokeLine from '../lib/strokeLine';
-import options from '../options';
-import { data } from './DataLoader';
-import PriceChartState from './PriceChartState';
+import config from '../config';
+import { data } from '../state/DataLoader';
+import PriceChartState from '../state/PriceChartState';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class MovingAverageLine {
   public state: PriceChartState;
@@ -10,7 +10,7 @@ export default class MovingAverageLine {
   }
 
   draw() {
-    options.movingAverageList.forEach(this.drawByInterval.bind(this));
+    config.movingAverageList.forEach(this.drawByInterval.bind(this));
   }
 
   drawByInterval({ interval, color }: { interval: number; color: string }) {

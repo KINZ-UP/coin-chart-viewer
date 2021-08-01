@@ -1,16 +1,15 @@
 import MovingAverageLine from './MovingAverageLine';
 import PriceCandle from './PriceCandle';
-import PriceChartState from './PriceChartState';
-import PriceChartYTick from './YTick/PriceChartYTick';
+import PriceChartState from '../state/PriceChartState';
+import PriceChartYTick from '../yAxis/PriceChartYTick';
 
 export default class PriceChart {
-  public state: PriceChartState;
+  public state: PriceChartState = PriceChartState.getInstance();
   public candleList: PriceCandle[] = [];
   public yTick: PriceChartYTick;
   public movingAverageLine: MovingAverageLine;
 
   constructor(public ctx: CanvasRenderingContext2D) {
-    this.state = PriceChartState.getInstance();
     this.yTick = new PriceChartYTick(ctx);
     this.movingAverageLine = new MovingAverageLine(ctx);
   }

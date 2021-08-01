@@ -1,8 +1,7 @@
-import scaleRange from '../../lib/scaleRange';
-import strokeLine from '../../lib/strokeLine';
-import options from '../../options';
-import PriceChartState from '../PriceChartState';
+import config from '../config';
+import PriceChartState from '../state/PriceChartState';
 import TickScaling from './TickScaling';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class PriceChartYTick {
   public state: PriceChartState = PriceChartState.getInstance();
@@ -10,7 +9,7 @@ export default class PriceChartYTick {
   public maxVal: number;
   public tickScale: TickScaling;
 
-  constructor(public ctx: CanvasRenderingContext2D | null) {
+  constructor(public ctx: CanvasRenderingContext2D) {
     this.tickScale = new TickScaling(
       this.state.minPriceOnView,
       this.state.maxPriceOnView
@@ -28,13 +27,13 @@ export default class PriceChartYTick {
 
   public draw(): void {
     if (!this.ctx) return;
-    const { fillStyle, leftPadding, fontFamily } = options.yAxis;
+    const { fillStyle, leftPadding, fontFamily } = config.yAxis;
     const { layout } = this.state.globalState;
 
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
     this.ctx.fillStyle = fillStyle;
-    this.ctx.strokeStyle = options.color.gridLine;
+    this.ctx.strokeStyle = config.color.gridLine;
     this.ctx.font = `${this.state.globalState.fontSize.yAxis}px ${fontFamily}`;
     let currY = this.getTickStart();
 

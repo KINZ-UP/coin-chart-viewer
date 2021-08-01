@@ -1,14 +1,14 @@
-import getDateString from '../lib/getDateString';
-import strokeLine from '../lib/strokeLine';
-import options from '../options';
-import GlobalState from './GlobalState';
+import config from '../config';
+import GlobalState from '../state/GlobalState';
+import getDateString from '../../../lib/getDateString';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class XAxis {
   public globalState: GlobalState;
   private labelIdxs: number[] = [];
   private labels: string[] = [];
 
-  constructor(public ctx: CanvasRenderingContext2D | null) {
+  constructor(public ctx: CanvasRenderingContext2D) {
     this.globalState = GlobalState.getInstance();
   }
 
@@ -32,12 +32,12 @@ export default class XAxis {
   }
 
   private draw() {
-    const { fillStyle, fontFamily, topPadding } = options.xAxis;
+    const { fillStyle, fontFamily, topPadding } = config.xAxis;
     if (!this.ctx) return;
     this.ctx.textBaseline = 'top';
     this.ctx.textAlign = 'center';
     this.ctx.fillStyle = fillStyle;
-    this.ctx.strokeStyle = options.color.gridLine;
+    this.ctx.strokeStyle = config.color.gridLine;
     this.ctx.font = `${this.globalState.fontSize.yAxis}px ${fontFamily}`;
 
     const labelPosY =

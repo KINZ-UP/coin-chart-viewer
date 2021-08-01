@@ -1,6 +1,6 @@
-import GlobalState from './GlobalState';
 import { data } from './DataLoader';
-import scaleRange from '../lib/scaleRange';
+import GlobalState from './GlobalState';
+import scaleRange from '../../../lib/scaleRange';
 
 export default class PriceChartState {
   public static instance: PriceChartState | null = null;

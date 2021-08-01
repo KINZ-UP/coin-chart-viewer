@@ -1,4 +1,4 @@
-import options from '../options';
+import config from '../config';
 
 export interface margin {
   top: number;
@@ -32,7 +32,7 @@ export default class Layout {
     margin: { top: 0, left: 0, bottom: 0, right: 0 },
   };
   public gap: number;
-  public settings = options.geoConfiguration;
+  public settings = config.geoConfiguration;
 
   constructor() {}
 

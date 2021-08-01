@@ -1,6 +1,6 @@
-import GlobalState from './GlobalState';
 import { data } from './DataLoader';
-import scaleRange from '../lib/scaleRange';
+import GlobalState from './GlobalState';
+import scaleRange from '../../../lib/scaleRange';
 
 export default class TrVolumnChartState {
   public static instance: TrVolumnChartState | null = null;

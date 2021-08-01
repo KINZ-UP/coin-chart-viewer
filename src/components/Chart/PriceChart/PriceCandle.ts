@@ -1,6 +1,6 @@
-import strokeLine from '../lib/strokeLine';
-import options from '../options';
-import PriceChartState from './PriceChartState';
+import config from '../config';
+import PriceChartState from '../state/PriceChartState';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class PriceCandle {
   public state: PriceChartState;
@@ -22,11 +22,11 @@ export default class PriceCandle {
     this.state = PriceChartState.getInstance();
     this.posXLeft =
       this.state.globalState.posXLeftByIdx[this.idx] +
-      this.state.globalState.barWidth * options.barPaddingRatio.priceChart;
+      this.state.globalState.barWidth * config.barPaddingRatio.priceChart;
     this.posXCenter = this.state.globalState.posXCenterByIdx[this.idx];
     this.width =
       this.state.globalState.barWidth *
-      (1 - 2 * options.barPaddingRatio.priceChart);
+      (1 - 2 * config.barPaddingRatio.priceChart);
   }
 
   public draw() {
@@ -38,8 +38,8 @@ export default class PriceCandle {
     if (!this.ctx) return;
 
     this.ctx.fillStyle = this.isUp
-      ? options.color.candleBody.up
-      : options.color.candleBody.down;
+      ? config.color.candleBody.up
+      : config.color.candleBody.down;
     this.ctx.fillRect(this.posXLeft, this.bodyTop, this.width, this.bodyHeight);
   }
 
@@ -47,8 +47,8 @@ export default class PriceCandle {
     if (!this.ctx) return;
 
     this.ctx.strokeStyle = this.isUp
-      ? options.color.candleShadow.up
-      : options.color.candleShadow.down;
+      ? config.color.candleShadow.up
+      : config.color.candleShadow.down;
 
     strokeLine(
       this.ctx,

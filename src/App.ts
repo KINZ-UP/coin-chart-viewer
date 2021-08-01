@@ -1,9 +1,9 @@
 import DataFetch from './api/DataFetch';
-import Canvas from './components/Canvas';
+import Chart from './components/Chart';
 import Header from './components/Header';
+import Subscriber from './store/Subscriber';
 import store from './store';
 import { updateMarketList } from './store/reducer';
-import Subscriber from './store/Subscriber';
 
 export type Market = {
   market: string;
@@ -20,7 +20,7 @@ export default class App extends Subscriber {
 
   private async init() {
     new Header();
-    new Canvas(800, 600);
+    new Chart(800, 600);
 
     const fetchedList: Market[] = await DataFetch.getMarketList();
     store.dispatch(updateMarketList(fetchedList.filter(this.isKRW)));

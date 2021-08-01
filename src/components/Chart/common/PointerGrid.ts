@@ -1,9 +1,9 @@
-import strokeLine from '../lib/strokeLine';
-import options from '../options';
-import GlobalState from './GlobalState';
-import PriceChartState from './PriceChartState';
+import config from '../config';
+import GlobalState from '../state/GlobalState';
+import PriceChartState from '../state/PriceChartState';
+import TrVolumnChartState from '../state/TrVolumeChartState';
 import PriceMarker from './PriceMarker';
-import TrVolumnChartState from './TrVolumeChartState';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class PointerGrid {
   public globalState: GlobalState = GlobalState.getInstance();
@@ -25,7 +25,7 @@ export default class PointerGrid {
     const { x, y } = this.globalState.pointer;
     if (!x || !y) return;
 
-    this.ctx.strokeStyle = options.pointerGrid.color;
+    this.ctx.strokeStyle = config.pointerGrid.color;
 
     const { global, width } = this.globalState.layout;
     const hztStartX = global.margin.left;

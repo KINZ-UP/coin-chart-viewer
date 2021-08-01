@@ -1,7 +1,7 @@
-import options from '../options';
-import GlobalState from './GlobalState';
-import PriceChartState from './PriceChartState';
-import TrVolumnChartState from './TrVolumeChartState';
+import config from '../config';
+import GlobalState from '../state/GlobalState';
+import PriceChartState from '../state/PriceChartState';
+import TrVolumnChartState from '../state/TrVolumeChartState';
 
 export default class PriceMarker {
   public globalState: GlobalState = GlobalState.getInstance();
@@ -19,8 +19,8 @@ export default class PriceMarker {
   private drawRect() {
     if (!this.globalState.pointer.y) return;
 
-    const height = options.pointerPriceMarker.height;
-    this.ctx.fillStyle = options.pointerPriceMarker.color.background;
+    const height = config.pointerPriceMarker.height;
+    this.ctx.fillStyle = config.pointerPriceMarker.color.background;
 
     const startX =
       this.globalState.layout.canvasWidth -
@@ -38,14 +38,14 @@ export default class PriceMarker {
     if (!this.globalState.pointer.y) return;
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
-    this.ctx.fillStyle = options.pointerPriceMarker.color.font;
+    this.ctx.fillStyle = config.pointerPriceMarker.color.font;
 
     const { layout } = this.globalState;
 
     const posX =
       layout.canvasWidth -
       layout.global.margin.right +
-      options.yAxis.leftPadding;
+      config.yAxis.leftPadding;
 
     const posY = this.globalState.pointer.y + layout.global.margin.top;
 

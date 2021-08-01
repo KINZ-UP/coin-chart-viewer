@@ -1,8 +1,7 @@
-import scaleRange from '../../lib/scaleRange';
-import strokeLine from '../../lib/strokeLine';
-import options from '../../options';
-import TrVolumeChartState from '../TrVolumeChartState';
+import config from '../config';
+import TrVolumeChartState from '../state/TrVolumeChartState';
 import TickScaling from './TickScaling';
+import strokeLine from '../../../lib/strokeLine';
 
 export default class TrVolumeChartYTick {
   public state: TrVolumeChartState = TrVolumeChartState.getInstance();
@@ -10,7 +9,7 @@ export default class TrVolumeChartYTick {
   public maxVal: number;
   public tickScale: TickScaling;
 
-  constructor(public ctx: CanvasRenderingContext2D | null) {
+  constructor(public ctx: CanvasRenderingContext2D) {
     this.tickScale = new TickScaling(0, this.state.maxTrVolumeOnView);
   }
 
@@ -22,14 +21,14 @@ export default class TrVolumeChartYTick {
 
   public draw(): void {
     if (!this.ctx) return;
-    const { fillStyle, leftPadding, fontFamily } = options.yAxis;
+    const { fillStyle, leftPadding, fontFamily } = config.yAxis;
     const { layout } = this.state.globalState;
 
     const formatTick = getformatTickFunc(this.tickScale.tickSpacing);
     this.ctx.textBaseline = 'middle';
     this.ctx.textAlign = 'left';
     this.ctx.fillStyle = fillStyle;
-    this.ctx.strokeStyle = options.color.gridLine;
+    this.ctx.strokeStyle = config.color.gridLine;
     this.ctx.font = `${this.state.globalState.fontSize.yAxis}px ${fontFamily}`;
     let currY = this.getTickStart();
     while (currY <= this.state.maxTrVolumeOnView) {

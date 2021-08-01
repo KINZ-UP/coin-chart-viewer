@@ -1,7 +1,5 @@
-import Subscriber from '../store/Subscriber';
-import DataFetch from '../api/DataFetch';
-import options from '../options';
-import { State } from '../store';
+import config from '../config';
+import DataFetch from '../../../api/DataFetch';
 
 export type data = {
   openPrice: number;
@@ -14,7 +12,7 @@ export type data = {
 };
 
 const { openPrice, closePrice, highPrice, lowPrice, tradeVolume, dateTime } =
-  options.dataProperties;
+  config.dataProperties;
 
 export type rawData = {
   [openPrice]: number;
@@ -43,7 +41,7 @@ export default class DataLoader {
     dateTime: new Date(),
 
     // movingAverages: {5: null, 10: null}
-    movingAverages: options.movingAverageList.reduce(
+    movingAverages: config.movingAverageList.reduce(
       (defaultMA, elem) => Object.assign(defaultMA, { [elem.interval]: null }),
       {}
     ),
@@ -75,7 +73,7 @@ export default class DataLoader {
     }
   }
 
-  public maIntervals: number[] = options.movingAverageList.map(
+  public maIntervals: number[] = config.movingAverageList.map(
     (ma) => ma.interval
   );
 

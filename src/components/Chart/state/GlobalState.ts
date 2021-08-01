@@ -1,4 +1,4 @@
-import options from '../options';
+import config from '../config';
 import DataLoader, { data } from './DataLoader';
 import Layout from './Layout';
 
@@ -23,7 +23,7 @@ export default class GlobalState {
   private constructor() {
     if (
       this.scaleLevel < 0 ||
-      this.scaleLevel >= options.numBarsOnViewList.length
+      this.scaleLevel >= config.numBarsOnViewList.length
     ) {
       throw Error(
         'scale level must be in range of numbBarsOnScreenList indexes'
@@ -57,7 +57,7 @@ export default class GlobalState {
   }
 
   public updateState(): void {
-    this.numBarsOnView = options.numBarsOnViewList[this.scaleLevel];
+    this.numBarsOnView = config.numBarsOnViewList[this.scaleLevel];
     this.updateDataOnView();
     this.updatePosXList();
   }
@@ -89,7 +89,7 @@ export default class GlobalState {
   public updateFontSize() {
     const locations: ('xAxis' | 'yAxis')[] = ['xAxis', 'yAxis'];
     locations.forEach((loc: 'xAxis' | 'yAxis') => {
-      const { maxFontSize, minFontSize, fontSizeRatio } = options[loc];
+      const { maxFontSize, minFontSize, fontSizeRatio } = config[loc];
       this.fontSize[loc] = Math.max(
         minFontSize,
         Math.min(
@@ -107,7 +107,7 @@ export default class GlobalState {
   }
 
   public zoomOut(): void {
-    if (this.scaleLevel >= options.numBarsOnViewList.length - 1) return;
+    if (this.scaleLevel >= config.numBarsOnViewList.length - 1) return;
     this.scaleLevel += 1;
     this.updateState();
   }

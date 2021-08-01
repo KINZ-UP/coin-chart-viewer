@@ -1,14 +1,14 @@
-import options from '../options';
+import { State } from '../../store';
+import config from './config';
+import GlobalState from './state/GlobalState';
 import PriceChart from './PriceChart';
-import GlobalState from './GlobalState';
 import TrVolumeChart from './TrVolumeChart';
-import debounce from '../lib/debounce';
-import XAxis from './XAxis';
-import formatDatetimeReqStr from '../lib/formatDatetimeReqStr';
-import Wrappers from './Wrappers';
-import PointerGrid from './PointerGrid';
-import Subscriber from '../store/Subscriber';
-import { State } from '../store';
+import XAxis from './common/XAxis';
+import PointerGrid from './common/PointerGrid';
+import Wrappers from './common/Wrappers';
+import Subscriber from '../../store/Subscriber';
+import formatDatetimeReqStr from '../../lib/formatDatetimeReqStr';
+import debounce from '../../lib/debounce';
 
 export default class Canvas extends Subscriber {
   public canvas: HTMLCanvasElement;
@@ -48,10 +48,10 @@ export default class Canvas extends Subscriber {
     this.canvas.width = Math.min(this.canvasWidth, clientWidth);
     this.canvas.height = this.canvasHeight;
 
-    if (options.geoConfiguration.maxAspectRatio) {
+    if (config.geoConfiguration.maxAspectRatio) {
       this.canvas.height = Math.min(
         this.canvasHeight,
-        clientWidth * options.geoConfiguration.maxAspectRatio
+        clientWidth * config.geoConfiguration.maxAspectRatio
       );
     }
 
@@ -89,10 +89,9 @@ export default class Canvas extends Subscriber {
     this.updateLayout();
     this.updateGlobalState();
 
-    this.xAxis.update();
     this.priceChart.update();
     this.trVolumeChart.update();
-    // this.outlines.update();
+    this.xAxis.update();
   }
 
   private updateGrid(): void {

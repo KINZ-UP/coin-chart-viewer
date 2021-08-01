@@ -1,4 +1,4 @@
-const options = {
+const config = {
   geoConfiguration: {
     margin: {
       ratio: {
@@ -89,4 +89,4 @@ const options = {
   },
 };
 
-export default options;
+export default config;

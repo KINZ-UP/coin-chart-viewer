@@ -1,4 +1,4 @@
-import GlobalState from './GlobalState';
+import GlobalState from '../state/GlobalState';
 
 export default class Wrappers {
   public outer: HTMLElement = document.createElement('div');
