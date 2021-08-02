@@ -10,7 +10,11 @@ export default class TrVolumeChartYTick {
   public tickScale: TickScaling;
 
   constructor(public ctx: CanvasRenderingContext2D) {
-    this.tickScale = new TickScaling(0, this.state.maxTrVolumeOnView);
+    this.tickScale = new TickScaling(
+      0,
+      this.state.maxTrVolumeOnView,
+      config.yAxis.maxNumTicks.trVolumeChart
+    );
   }
 
   public update(): void {

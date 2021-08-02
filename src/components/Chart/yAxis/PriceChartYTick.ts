@@ -12,7 +12,8 @@ export default class PriceChartYTick {
   constructor(public ctx: CanvasRenderingContext2D) {
     this.tickScale = new TickScaling(
       this.state.minPriceOnView,
-      this.state.maxPriceOnView
+      this.state.maxPriceOnView,
+      config.yAxis.maxNumTicks.priceChart
     );
   }
 

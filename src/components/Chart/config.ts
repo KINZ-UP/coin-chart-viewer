@@ -41,7 +41,7 @@ const config = {
   },
   numBarsOnViewList: [8, 12, 17, 23, 30, 38, 47, 57, 68, 80, 93, 105],
   yAxis: {
-    maxNumTicks: 7,
+    maxNumTicks: { priceChart: 10, trVolumeChart: 5 },
     fillStyle: '#333',
     fontFamily: 'Montserrat, Noto Sans KR',
     maxFontSize: 12,

@@ -1,13 +1,14 @@
-import config from '../config';
-
 export default class TickScaling {
   public tickSpacing: number;
   public minTick: number;
   public maxTick: number;
   private range: number;
-  public maxNumTicks: number = config.yAxis.maxNumTicks;
 
-  constructor(public minPoint: number, public maxPoint: number) {
+  constructor(
+    public minPoint: number,
+    public maxPoint: number,
+    public maxNumTicks: number
+  ) {
     this.calculate();
   }
 
