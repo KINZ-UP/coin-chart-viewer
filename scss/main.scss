@@ -85,6 +85,33 @@ body {
 
       #canvas-inner-wrapper {
         position: absolute;
+        #item-legend-container {
+          font-size: 0.7rem;
+          padding: 0.5rem 0.3rem;
+          margin: 0.6rem;
+          background: rgba(255, 255, 255, 0.7);
+          border: 1px solid #999;
+          user-select: none;
+          max-width: 10rem;
+
+          #item-date-wrapper {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+          }
+
+          #item-legend-wrapper {
+            display: flex;
+            gap: 0.5rem 0.6rem;
+            flex-wrap: wrap;
+          }
+
+          .item-legend {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.3rem;
+            width: 4.5rem;
+          }
+        }
       }
 
       .section-wrapper {

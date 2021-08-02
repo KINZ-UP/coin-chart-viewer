@@ -1,4 +1,5 @@
 import GlobalState from '../state/GlobalState';
+import Legend from './Legend';
 
 export default class Wrappers {
   public outer: HTMLElement = document.createElement('div');
@@ -7,6 +8,7 @@ export default class Wrappers {
   public lower: HTMLElement = document.createElement('div');
   public gap: HTMLElement = document.createElement('div');
   public buttonWrapper: HTMLElement = document.createElement('div');
+  public legend: Legend = new Legend();
   public zoomInBtn: HTMLButtonElement = document.createElement('button');
   public zoomOutBtn: HTMLButtonElement = document.createElement('button');
 
@@ -31,6 +33,7 @@ export default class Wrappers {
     this.lower.classList.add('section-wrapper');
     this.gap.classList.add('section-wrapper');
 
+    this.inner.appendChild(this.legend);
     this.outer.appendChild(this.upper);
     this.outer.appendChild(this.lower);
     this.outer.appendChild(this.canvas);

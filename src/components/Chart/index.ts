@@ -92,6 +92,7 @@ export default class Canvas extends Subscriber {
     this.xAxis.update();
     this.priceChart.update();
     this.trVolumeChart.update();
+    this.wrappers.legend.update();
   }
 
   private updateGrid(): void {
@@ -100,6 +101,7 @@ export default class Canvas extends Subscriber {
     this.priceChart.update();
     this.trVolumeChart.update();
     this.pointerGrid.update();
+    this.wrappers.legend.update();
   }
 
   private updateLayout(): void {
