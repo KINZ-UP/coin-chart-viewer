@@ -41,16 +41,8 @@ export default class PointerGrid {
   }
 
   private getPointerX(): number {
-    if (!this.globalState.pointer.x) return 0;
-    const idx = Math.floor(
-      (this.globalState.layout.width - this.globalState.pointer.x) /
-        this.globalState.barWidth
-    );
-
-    return (
-      this.globalState.posXCenterByIdx[idx] -
-      Math.min(0, this.globalState.offsetCount) * this.globalState.barWidth
-    );
+    const idx = this.globalState.pointerIdx ? this.globalState.pointerIdx : 0;
+    return this.globalState.posXCenterByIdx[idx];
   }
 
   private getPointerY(): number {

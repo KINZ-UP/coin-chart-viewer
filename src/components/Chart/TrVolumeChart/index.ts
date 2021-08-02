@@ -4,7 +4,7 @@ import TrVolumeChartYTick from '../yAxis/TrVolumeChartYTick';
 
 export default class TrVolumeChart {
   public state: TrVolumnChartState = TrVolumnChartState.getInstance();
-  public barList: TrVolumeBar[] = [];
+  public barList: (TrVolumeBar | null)[] = [];
   public yTick: TrVolumeChartYTick;
 
   constructor(public ctx: CanvasRenderingContext2D) {
@@ -22,6 +22,7 @@ export default class TrVolumeChart {
       this.state.globalState.layout.canvasHeight -
       this.state.globalState.layout.lower.margin.bottom;
     this.barList = this.state.globalState.dataOnView.map((data, idx) => {
+      if (!data) return null;
       const yMax = this.state.scaleY(data.tradeVolume);
       const height = yMax - yMin;
       const isUp = data.openPrice <= data.closePrice;

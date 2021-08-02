@@ -16,8 +16,10 @@ export default class MovingAverageLine {
   drawByInterval({ interval, color }: { interval: number; color: string }) {
     this.ctx.strokeStyle = color;
     const dataList = this.state.globalState.dataOnView;
-    dataList.slice(0, dataList.length - 1).forEach((curr: data, idx) => {
+    dataList.slice(0, dataList.length - 1).forEach((curr: data | null, idx) => {
       const prev = dataList[idx + 1];
+      if (!curr || !prev) return;
+
       const prevY = this.getScaledMovingAverage(prev, interval);
       const currY = this.getScaledMovingAverage(curr, interval);
 

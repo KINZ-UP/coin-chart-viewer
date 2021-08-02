@@ -25,7 +25,8 @@ export default class TrVolumnChartState {
 
   public calcMaxTrVolume(): number {
     return this.globalState.dataOnView.reduce(
-      (maxTrVolume: number, data: data) => {
+      (maxTrVolume: number, data: data | null) => {
+        if (!data) return maxTrVolume;
         return Math.max(maxTrVolume, data.tradeVolume);
       },
       0

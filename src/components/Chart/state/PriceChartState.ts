@@ -29,7 +29,8 @@ export default class PriceChartState {
 
   public calcMaxPrice(): number {
     return this.globalState.dataOnView.reduce(
-      (maxPrice: number, data: data) => {
+      (maxPrice: number, data: data | null) => {
+        if (!data) return maxPrice;
         return Math.max(
           maxPrice,
           data.highPrice,
@@ -42,7 +43,8 @@ export default class PriceChartState {
 
   public calcMinPrice(): number {
     return this.globalState.dataOnView.reduce(
-      (minPrice: number, data: data) => {
+      (minPrice: number, data: data | null) => {
+        if (!data) return minPrice;
         return Math.min(
           minPrice,
           data.lowPrice,

@@ -5,7 +5,7 @@ import PriceChartYTick from '../yAxis/PriceChartYTick';
 
 export default class PriceChart {
   public state: PriceChartState = PriceChartState.getInstance();
-  public candleList: PriceCandle[] = [];
+  public candleList: (PriceCandle | null)[] = [];
   public yTick: PriceChartYTick;
   public movingAverageLine: MovingAverageLine;
 
@@ -22,6 +22,7 @@ export default class PriceChart {
   private draw() {
     this.yTick.update();
     this.candleList = this.state.globalState.dataOnView.map((data, idx) => {
+      if (!data) return null;
       const open = this.state.scaleY(data.openPrice);
       const close = this.state.scaleY(data.closePrice);
       const high = this.state.scaleY(data.highPrice);

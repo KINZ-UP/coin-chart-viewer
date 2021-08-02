@@ -10,7 +10,7 @@ export default class GlobalState {
   public dataLoader: DataLoader;
   public scaleLevel: number = 4;
   public numBarsOnView: number;
-  public dataOnView: data[] = [];
+  public dataOnView: (data | null)[] = [];
   public offsetCount: number = 0;
   public barWidth: number = 0;
   public posXLeftByIdx: number[] = [];
@@ -19,6 +19,7 @@ export default class GlobalState {
   public loading: boolean = false;
   public chartBoundingRect: { left: number; top: number } = { left: 0, top: 0 };
   public pointer: Pointer = { x: null, y: null };
+  public pointerIdx: number | null = null;
 
   private constructor() {
     if (
@@ -63,10 +64,11 @@ export default class GlobalState {
   }
 
   public updateDataOnView(): void {
-    this.dataOnView = this.dataLoader.dataList.slice(
-      Math.max(this.offsetCount, 0),
-      this.offsetCount + this.numBarsOnView
-    );
+    this.dataOnView = Array(this.numBarsOnView)
+      .fill(null)
+      .map(
+        (_, idx) => this.dataLoader.dataList[idx + this.offsetCount] ?? null
+      );
   }
 
   public updatePosXList(): void {
@@ -81,8 +83,7 @@ export default class GlobalState {
     return (
       this.layout.canvasWidth -
       this.barWidth * (idx + 1) -
-      this.layout.global.margin.right +
-      Math.min(0, this.offsetCount) * this.barWidth
+      this.layout.global.margin.right
     );
   }
 
@@ -119,6 +120,9 @@ export default class GlobalState {
   public updatePointer({ x, y }: Pointer) {
     this.pointer.x = x ? x - this.chartBoundingRect.left : null;
     this.pointer.y = y ? y - this.chartBoundingRect.top : null;
+    this.pointerIdx = this.pointer.x
+      ? Math.floor((this.layout.width - this.pointer.x) / this.barWidth)
+      : null;
   }
 
   public mouseMove(offsetCount: number): void {
