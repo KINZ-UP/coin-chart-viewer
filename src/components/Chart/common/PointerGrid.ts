@@ -46,7 +46,11 @@ export default class PointerGrid {
       (this.globalState.layout.width - this.globalState.pointer.x) /
         this.globalState.barWidth
     );
-    return this.globalState.posXCenterByIdx[idx];
+
+    return (
+      this.globalState.posXCenterByIdx[idx] -
+      Math.min(0, this.globalState.offsetCount) * this.globalState.barWidth
+    );
   }
 
   private getPointerY(): number {
