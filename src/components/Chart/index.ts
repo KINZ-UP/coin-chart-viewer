@@ -1,215 +1,137 @@
-import { State } from '../../store';
-import config from './config';
-import GlobalState from './state/GlobalState';
-import PriceChart from './PriceChart';
-import TrVolumeChart from './TrVolumeChart';
-import XAxis from './common/XAxis';
-import PointerGrid from './common/PointerGrid';
-import Wrappers from './common/Wrappers';
-import Subscriber from '../../store/Subscriber';
-import formatDatetimeReqStr from '../../lib/formatDatetimeReqStr';
-import debounce from '../../lib/debounce';
+import { data } from './model/data';
+import Model from './model';
+import Display from './display';
+import Control from './control';
+import debounce from './lib/debounce';
 
-export default class Canvas extends Subscriber {
-  public canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D | null;
-  public wrappers: Wrappers;
-  public priceChart: PriceChart;
-  public trVolumeChart: TrVolumeChart;
-  public xAxis: XAxis;
-  public pointerGrid: PointerGrid;
-  public globalState: GlobalState;
-  public btnWrapper: HTMLElement | null;
+export default class Chart {
+  public model: Model;
+  public display: Display;
+  public control: Control;
 
-  public isMouseDown: boolean = false;
-  private mouseMoveStartPosX: number = 0;
-  private offsetCountStart: number = 0;
+  constructor(
+    maxCanvasWidth: number,
+    maxCanvasHeight: number,
+    private staticData?: data[],
+    private onInitFetch?: () => Promise<data[]>,
+    private onFetchMore?: () => Promise<data[]>
+  ) {
+    this.model = new Model(maxCanvasWidth, maxCanvasHeight);
+    this.display = new Display(this.model.data, this.model.pointer);
+    this.control = new Control();
 
-  constructor(private canvasWidth: number, private canvasHeight: number) {
-    super();
-
-    this.canvas = document.createElement('canvas');
-    this.wrappers = new Wrappers(this.canvas);
-    this.btnWrapper = document.getElementById('button-wrapper');
-
-    this.canvas.width = canvasWidth;
-    this.canvas.height = canvasHeight;
-    this.ctx = this.canvas.getContext('2d');
-
-    this.globalState = GlobalState.getInstance();
-
-    this.init();
     this.resize();
+    this.init();
     this.assignEvents();
   }
 
   private resize(): void {
-    const clientWidth = document.documentElement.clientWidth;
-    this.canvas.width = Math.min(this.canvasWidth, clientWidth);
-    this.canvas.height = this.canvasHeight;
-
-    if (config.geoConfiguration.maxAspectRatio) {
-      this.canvas.height = Math.min(
-        this.canvasHeight,
-        clientWidth * config.geoConfiguration.maxAspectRatio
-      );
-    }
-
-    this.globalState.updateLayout(this.canvas.width, this.canvas.height);
-    this.wrappers.resize();
-    this.globalState.updateChartBound(this.wrappers.inner);
-
-    this.update();
+    this.model.resize();
+    this.display.onResize(this.model);
+    this.model.layout.updateInnerBoundingRect(this.display.wrapper.$inner);
   }
 
-  private init(): void {
-    if (!this.ctx) return;
-    this.priceChart = new PriceChart(this.ctx);
-    this.trVolumeChart = new TrVolumeChart(this.ctx);
-    this.xAxis = new XAxis(this.ctx);
-    this.pointerGrid = new PointerGrid(this.ctx);
-    this.initFetch();
+  public async init(): Promise<void> {
+    this.assingStaticData();
+    if (!this.onInitFetch) return;
+    const data = await this.onInitFetch();
+    this.model.init(data);
+    this.display.onFetch(this.model);
   }
 
-  public async updateState(state: State) {
-    if (this.state.market.market !== state.market.market) {
-      await this.globalState.init(state.market.market);
-      this.update();
-    }
-    this.state = state;
-  }
-
-  private async initFetch(): Promise<void> {
-    await this.globalState.init(this.state.market.market);
-    this.update();
-  }
-
-  private update(): void {
-    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.updateLayout();
-    this.updateGlobalState();
-
-    this.xAxis.update();
-    this.priceChart.update();
-    this.trVolumeChart.update();
-    this.wrappers.legend.update();
-  }
-
-  private updateGrid(): void {
-    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.xAxis.update();
-    this.priceChart.update();
-    this.trVolumeChart.update();
-    this.pointerGrid.update();
-    this.wrappers.legend.update();
-  }
-
-  private updateLayout(): void {
-    this.globalState.updateLayout(this.canvas.width, this.canvas.height);
-  }
-
-  private updateGlobalState(): void {
-    this.globalState.updateState();
+  private assingStaticData() {
+    if (!this.staticData) return;
+    this.model.init(this.staticData);
   }
 
   private assignEvents(): void {
+    const { wrapper } = this.display;
     window.addEventListener('resize', debounce(this.resize.bind(this), 100));
 
-    this.wrappers.zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
-    this.wrappers.zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
+    wrapper.$zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
+    wrapper.$zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
 
-    this.wrappers.inner.addEventListener(
-      'mousedown',
-      this.mouseDown.bind(this)
-    );
-    this.wrappers.inner.addEventListener('mousemove', this.mouseMove());
-    this.wrappers.inner.addEventListener(
-      'mouseleave',
-      this.mouseLeave.bind(this)
-    );
-    this.wrappers.inner.addEventListener(
-      'touchstart',
-      this.touchStart.bind(this)
-    );
-    this.wrappers.inner.addEventListener('touchmove', this.touchMove());
-    this.wrappers.inner.addEventListener('touchend', this.mouseUp.bind(this));
+    wrapper.$inner.addEventListener('mousedown', this.mouseDown.bind(this));
+    wrapper.$inner.addEventListener('mousemove', this.mouseMove());
+    wrapper.$inner.addEventListener('mouseleave', this.mouseLeave.bind(this));
+    wrapper.$inner.addEventListener('touchstart', this.touchStart.bind(this));
+    wrapper.$inner.addEventListener('touchmove', this.touchMove());
+    wrapper.$inner.addEventListener('touchend', this.mouseUp.bind(this));
     window.addEventListener('mouseup', this.mouseUp.bind(this));
   }
 
   private zoomIn(): void {
-    this.globalState.zoomIn();
-    this.update();
+    this.model.zoomIn();
+    this.display.onChange(this.model);
   }
 
   private zoomOut(): void {
-    this.globalState.zoomOut();
-    this.update();
+    this.model.zoomOut();
+    this.display.onChange(this.model);
     this.onNeedMoreData();
   }
 
-  private swipe(e: Touch | MouseEvent) {
-    this.globalState.updatePointer({ x: e.clientX, y: e.clientY });
-    if (!this.isMouseDown) {
-      this.updateGrid();
+  private onMove(e: Touch | MouseEvent) {
+    this.model.onMouseMove([e.clientX, e.clientY]);
+    if (!this.control.isMouseDown) {
+      this.display.onMouseMove(this.model);
       return;
     }
-    const mouseMoveX = e.clientX - this.mouseMoveStartPosX;
-    this.globalState.mouseMove(
-      this.offsetCountStart + Math.floor(mouseMoveX / this.globalState.barWidth)
+
+    const mouseMoveX = e.clientX - this.control.mouseMoveStartPosX;
+    this.model.onSwipe(
+      this.control.offsetCountStart +
+        Math.floor(mouseMoveX / this.model.state.global.barWidth)
     );
-    this.update();
+    this.display.onSwipe(this.model);
     this.onNeedMoreData();
   }
 
   private mouseDown(e: MouseEvent): void {
-    this.isMouseDown = true;
-    this.mouseMoveStartPosX = e.clientX;
-    this.offsetCountStart = this.globalState.offsetCount;
+    this.control.mouseDown(e.clientX, this.model.state.global.offsetCount);
   }
 
   private touchStart(e: TouchEvent): void {
-    this.isMouseDown = true;
-    this.mouseMoveStartPosX = e.changedTouches[0].clientX;
-    this.offsetCountStart = this.globalState.offsetCount;
+    this.control.mouseDown(
+      e.changedTouches[0].clientX,
+      this.model.state.global.offsetCount
+    );
   }
 
   private touchMove(): (e: TouchEvent) => void {
-    return (e: TouchEvent) => this.swipe(e.changedTouches[0]);
+    return (e: TouchEvent) => this.onMove(e.changedTouches[0]);
   }
 
   private mouseMove(): (e: MouseEvent) => void {
-    return (e: MouseEvent) => this.swipe(e);
+    return (e: MouseEvent) => this.onMove(e);
   }
 
-  private mouseLeave(e: MouseEvent): void {
-    this.globalState.updatePointer({ x: null, y: null });
-    this.updateGrid();
+  private mouseLeave(): void {
+    this.model.onMouseMove(null);
+    this.display.onMouseMove(this.model);
   }
 
   private async onNeedMoreData(): Promise<void> {
-    if (this.globalState.loading) return;
-    const dataList = this.globalState.dataLoader.dataList;
+    if (!this.onFetchMore) return;
+    if (this.model.loading) return;
 
+    const dataList = this.model.data.dataList;
     if (
       dataList.length -
-        this.globalState.offsetCount -
-        this.globalState.dataOnView.length >=
+        this.model.state.global.offsetCount -
+        this.model.data.dataOnView.length >=
       50
     )
       return;
 
-    this.globalState.loading = true;
-    await this.globalState.dataLoader.fetchMore(
-      this.state.market.market,
-      formatDatetimeReqStr(dataList[dataList.length - 1].dateTime)
-    );
-    this.update();
-    this.globalState.loading = false;
+    this.model.startLoading();
+    const data = await this.onFetchMore();
+    this.model.onFetch(data);
+    this.display.onFetch(this.model);
+    this.model.finishLoading();
   }
 
   private mouseUp(): void {
-    this.isMouseDown = false;
-    this.mouseMoveStartPosX = 0;
-    this.offsetCountStart = 0;
+    this.control.mouseUp();
   }
 }
