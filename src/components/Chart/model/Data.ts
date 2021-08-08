@@ -1,4 +1,5 @@
 import chartConfig from '../chartConfig';
+import getDatetimeUnit from '../lib/getDatetimeUnit';
 
 export type chartData = {
   openPrice: number;
@@ -23,6 +24,8 @@ export type movingAverageData = {
   [key: number]: number | null;
 };
 
+export type dateTimeUnit = 'minutes' | 'days' | 'months';
+
 export default class Data {
   private _dataList: data[] = [];
   private _dataOnView: data[] = [];
@@ -31,6 +34,7 @@ export default class Data {
     (ma) => ma.interval
   );
   public noMore: boolean = false;
+  public unit: dateTimeUnit = 'days';
 
   constructor() {}
 
@@ -54,6 +58,7 @@ export default class Data {
     this.dataList = [];
     this.noMore = false;
     this.onFetch(data);
+    this.unit = getDatetimeUnit(data);
   }
 
   onFetch(data: data[]) {

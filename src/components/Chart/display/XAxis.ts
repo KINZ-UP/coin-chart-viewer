@@ -1,7 +1,8 @@
 import Model from '../model';
 import chartConfig from '../chartConfig';
-import getDateString from '../lib/getDateString';
 import strokeLine from '../lib/strokeLine';
+import moment from 'moment';
+import { dateTimeUnit } from '../model/data';
 
 export default class XAxis {
   private labelIdxs: number[] = [];
@@ -22,7 +23,7 @@ export default class XAxis {
 
     this.labels = this.labelIdxs.map((idx) => {
       const dateTime = data.dataOnView[idx]?.dateTime;
-      return dateTime ? getDateString(new Date(dateTime)) : '';
+      return dateTime ? getDateString(new Date(dateTime), data.unit) : '';
     });
   }
 
@@ -54,5 +55,19 @@ export default class XAxis {
       strokeLine(this.ctx, posX, upperGridStart, posX, upperGridEnd);
       strokeLine(this.ctx, posX, lowerGridStart, posX, lowerGridEnd);
     });
+  }
+}
+
+function getDateString(date: Date, unit: dateTimeUnit): string {
+  const datetime = moment(date);
+  switch (unit) {
+    case 'minutes': {
+      return datetime.format('M.DD  HH:mm');
+    }
+    case 'months': {
+      return datetime.format('YYYY.M');
+    }
+    default:
+      return datetime.format('M.D');
   }
 }
