@@ -113,6 +113,7 @@ export default class Chart {
 
   private async onNeedMoreData(): Promise<void> {
     if (!this.onFetchMore) return;
+    if (this.model.data.noMore) return;
     if (this.model.loading) return;
 
     const dataList = this.model.data.dataList;

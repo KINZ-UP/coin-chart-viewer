@@ -1,6 +1,6 @@
 import DataFetch, { dataQuery } from './api/DataFetch';
 import Chart from './components/Chart';
-import Header from './components/Header';
+import Header from './components/Headers';
 import Subscriber from './store/Subscriber';
 import store, { State } from './store';
 import { updateMarketList } from './store/reducer';
@@ -56,6 +56,11 @@ export default class App extends Subscriber {
       this.state = state;
       this.chart.init();
     }
+    if (this.state.unit !== state.unit || this.state.minute !== state.minute) {
+      this.state.unit = state.unit;
+      this.state.minute = state.minute;
+      this.chart.init();
+    }
   }
 
   private isKRW(market: Market) {
@@ -65,6 +70,8 @@ export default class App extends Subscriber {
   async onInitFetch(): Promise<data[]> {
     const dataQuery: dataQuery = {
       market: this.state.market.market,
+      unit: this.state.unit,
+      minute: this.state.minute,
       count: 100,
     };
     const fetchedData: rawData = await this.dataFetch.fetchData(dataQuery);
@@ -75,6 +82,8 @@ export default class App extends Subscriber {
     const { dataList } = this.chart.model.data;
     const dataQuery: dataQuery = {
       market: this.state.market.market,
+      unit: this.state.unit,
+      minute: this.state.minute,
       count: 50,
       to: formatDatetimeReqStr(dataList[dataList.length - 1].dateTime),
     };

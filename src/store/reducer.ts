@@ -4,10 +4,14 @@ import { Market } from '../App';
 type state = {
   market: Market;
   marketList: Market[];
+  unit: string;
+  minute: string | null;
 };
 
 const UPDATE_MARKET_LIST = 'UPDATE_MARKET_LIST' as const;
 const CHANGE_MARKET = 'CHANGE_MARKET' as const;
+const CHANGE_UNIT = 'CHANGE_UNIT' as const;
+const CHANGE_UNIT_TO_MINUTE = 'CHANGE_UNIT_TO_MINUTE' as const;
 
 export const updateMarketList = (list: Market[]) => ({
   type: UPDATE_MARKET_LIST,
@@ -17,6 +21,14 @@ export const changeMarket = (market: Market) => ({
   type: CHANGE_MARKET,
   payload: market,
 });
+export const changeUnit = (unit: string) => ({
+  type: CHANGE_UNIT,
+  payload: unit,
+});
+export const changeUnitToMinute = (minute: string) => ({
+  type: CHANGE_UNIT_TO_MINUTE,
+  payload: minute,
+});
 
 export const initialState: state = {
   market: {
@@ -25,6 +37,8 @@ export const initialState: state = {
     english_name: 'Bitcoin',
   },
   marketList: [],
+  unit: 'days',
+  minute: null,
 };
 
 export default function reducer(
@@ -42,6 +56,20 @@ export default function reducer(
       return {
         ...state,
         market: action.payload,
+      };
+    }
+    case CHANGE_UNIT: {
+      return {
+        ...state,
+        unit: action.payload,
+        minute: null,
+      };
+    }
+    case CHANGE_UNIT_TO_MINUTE: {
+      return {
+        ...state,
+        unit: 'minutes',
+        minute: action.payload,
       };
     }
     default:

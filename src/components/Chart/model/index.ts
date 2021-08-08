@@ -45,6 +45,7 @@ export default class Model {
 
   onFetch(newData: data[]) {
     this.data.onFetch(newData);
+    this.update();
   }
 
   onMouseMove(coord: [number, number] | null) {

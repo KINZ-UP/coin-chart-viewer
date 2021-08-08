@@ -1,6 +1,6 @@
-import { Market } from '../App';
-import store from '../store';
-import { changeMarket } from '../store/reducer';
+import { Market } from '../../App';
+import store from '../../store';
+import { changeMarket } from '../../store/reducer';
 
 export default class MarketListItem extends HTMLLIElement {
   constructor(market: Market, onClose: () => void) {

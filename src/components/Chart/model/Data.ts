@@ -30,6 +30,7 @@ export default class Data {
   private maIntervals: number[] = chartConfig.movingAverageList.map(
     (ma) => ma.interval
   );
+  public noMore: boolean = false;
 
   constructor() {}
 
@@ -51,10 +52,15 @@ export default class Data {
 
   init(data: data[]) {
     this.dataList = [];
+    this.noMore = false;
     this.onFetch(data);
   }
 
   onFetch(data: data[]) {
+    if (data.length === 0) {
+      this.noMore = true;
+      return;
+    }
     data.forEach((d) => {
       this.pushData(d);
     });

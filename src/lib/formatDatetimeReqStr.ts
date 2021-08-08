@@ -1,5 +1,5 @@
 import moment from 'moment';
 
-export default function formatDatetimeReqStr(date: Date | string): string {
-  return moment(date).subtract(1, 'd').format('YYYY-MM-DD HH:mm:ss');
+export default function formatDatetimeReqStr(datetime: Date | string): string {
+  return moment(datetime).utc().format('YYYY-MM-DD HH:mm:ss');
 }
