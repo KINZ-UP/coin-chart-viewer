@@ -1,16 +1,21 @@
 import Model from '../../model';
 import chartConfig from '../../chartConfig';
+import Pointer from '../../model/Pointer';
 
 export default class PriceMarker {
   constructor(public ctx: CanvasRenderingContext2D) {}
 
-  public draw(model: Model, formatTrVolumeTick: (num: number) => string) {
-    this.drawRect(model);
-    this.drawPrice(model, formatTrVolumeTick);
+  public draw(
+    model: Model,
+    pointer: Pointer,
+    formatTrVolumeTick: (num: number) => string
+  ) {
+    this.drawRect(model, pointer);
+    this.drawPrice(model, pointer, formatTrVolumeTick);
   }
 
-  private drawRect(model: Model) {
-    const { layout, pointer } = model;
+  private drawRect(model: Model, pointer: Pointer) {
+    const { layout } = model;
 
     if (!pointer.y) return;
 
@@ -24,8 +29,12 @@ export default class PriceMarker {
     this.ctx.fillRect(startX, startY, width, height);
   }
 
-  private drawPrice(model: Model, formatTrVolumeTick: (num: number) => string) {
-    const { layout, pointer, state } = model;
+  private drawPrice(
+    model: Model,
+    pointer: Pointer,
+    formatTrVolumeTick: (num: number) => string
+  ) {
+    const { layout, state } = model;
 
     if (!pointer.y) return;
 

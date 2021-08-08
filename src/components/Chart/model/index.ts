@@ -7,13 +7,12 @@ export default class Model {
   public data: Data = new Data();
   public layout: Layout;
   public state: State;
-  public pointer: Pointer;
+
   public _loading: boolean = false;
 
   constructor(maxCanvasWidth: number, maxCanvasHeight: number) {
     this.layout = new Layout(maxCanvasWidth, maxCanvasHeight);
     this.state = new State(this.data, this.layout);
-    this.pointer = new Pointer(this.layout, this.state.global);
   }
 
   public get loading() {
@@ -46,10 +45,6 @@ export default class Model {
   onFetch(newData: data[]) {
     this.data.onFetch(newData);
     this.update();
-  }
-
-  onMouseMove(coord: [number, number] | null) {
-    this.pointer.update(coord);
   }
 
   zoomIn() {

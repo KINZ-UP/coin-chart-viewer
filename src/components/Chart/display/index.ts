@@ -3,6 +3,7 @@ import PriceChart from './PriceChart';
 import TrVolumeChart from './TrVolumeChart';
 import PointerGrid from './PointerGrid';
 import XAxis from './XAxis';
+import Pointer from '../model/Pointer';
 
 export default class Display {
   public canvas: HTMLCanvasElement = document.createElement('canvas');
@@ -27,8 +28,8 @@ export default class Display {
     this.trVolumeChart.draw(model);
   }
 
-  private drawPointerGrid(model: Model) {
-    this.pointerGrid.draw(model, this.trVolumeChart.yAxis.formatTick);
+  private drawPointerGrid(model: Model, pointer: Pointer) {
+    this.pointerGrid.draw(model, pointer, this.trVolumeChart.yAxis.formatTick);
   }
 
   public onChange(model: Model) {
@@ -46,9 +47,9 @@ export default class Display {
     this.draw(model);
   }
 
-  onMouseMove(model: Model) {
+  onMouseMove(model: Model, pointer: Pointer) {
     this.draw(model);
-    this.drawPointerGrid(model);
+    this.drawPointerGrid(model, pointer);
   }
 
   onSwipe(model: Model) {

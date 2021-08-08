@@ -42,7 +42,7 @@ export default class Chart {
     const data = await this.onInitFetch();
     this.model.init(data);
     this.display.onFetch(this.model);
-    this.wrapper.update(this.model.data, this.model.pointer);
+    this.wrapper.update(this.model.data, this.control.pointer);
   }
 
   private assingStaticData() {
@@ -86,10 +86,14 @@ export default class Chart {
   }
 
   private onMove(e: Touch | MouseEvent) {
-    this.model.onMouseMove([e.clientX, e.clientY]);
+    this.control.onMouseMove(
+      [e.clientX, e.clientY],
+      this.model.layout,
+      this.model.state.global.barWidth
+    );
     if (!this.control.isMouseDown) {
-      this.display.onMouseMove(this.model);
-      this.wrapper.update(this.model.data, this.model.pointer);
+      this.display.onMouseMove(this.model, this.control.pointer);
+      this.wrapper.update(this.model.data, this.control.pointer);
       return;
     }
 
@@ -122,9 +126,13 @@ export default class Chart {
   }
 
   private mouseLeave(): void {
-    this.model.onMouseMove(null);
-    this.display.onMouseMove(this.model);
-    this.wrapper.update(this.model.data, this.model.pointer);
+    this.control.onMouseMove(
+      null,
+      this.model.layout,
+      this.model.state.global.barWidth
+    );
+    this.display.onMouseMove(this.model, this.control.pointer);
+    this.wrapper.update(this.model.data, this.control.pointer);
   }
 
   private async onNeedMoreData(): Promise<void> {
@@ -145,7 +153,7 @@ export default class Chart {
     const data = await this.onFetchMore();
     this.model.onFetch(data);
     this.display.onFetch(this.model);
-    this.wrapper.update(this.model.data, this.model.pointer);
+    this.wrapper.update(this.model.data, this.control.pointer);
     this.model.finishLoading();
   }
 
