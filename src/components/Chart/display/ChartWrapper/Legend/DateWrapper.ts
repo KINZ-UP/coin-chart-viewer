@@ -3,19 +3,15 @@ import Data, { dateTimeUnit } from '../../../model/Data';
 import Pointer from '../../../model/Pointer';
 
 export default class DateWrapper extends HTMLDivElement {
-  constructor(public data: Data, public pointer: Pointer) {
+  constructor() {
     super();
   }
 
-  public update() {
-    this.render();
-  }
-
-  private render() {
-    const data = this.pointer.idx
-      ? this.data.dataOnView[this.pointer.idx] ?? this.data.dataList[0]
-      : this.data.dataList[0];
-    this.textContent = getDateString(data.dateTime, this.data.unit);
+  public update(data: Data, pointer: Pointer) {
+    const d = pointer.idx
+      ? data.dataOnView[pointer.idx] ?? data.dataList[0]
+      : data.dataList[0];
+    this.textContent = getDateString(d.dateTime, data.unit);
   }
 }
 

@@ -2,14 +2,17 @@ import { data } from './model/data';
 import Model from './model';
 import Display from './display';
 import Control from './control';
+import ChartWrapper from './display/ChartWrapper';
 import debounce from './lib/debounce';
 
 export default class Chart {
   public model: Model;
   public display: Display;
   public control: Control;
+  public wrapper: ChartWrapper;
 
   constructor(
+    parent: string,
     maxCanvasWidth: number,
     maxCanvasHeight: number,
     private staticData?: data[],
@@ -17,8 +20,9 @@ export default class Chart {
     private onFetchMore?: () => Promise<data[]>
   ) {
     this.model = new Model(maxCanvasWidth, maxCanvasHeight);
-    this.display = new Display(this.model.data, this.model.pointer);
+    this.display = new Display();
     this.control = new Control();
+    this.wrapper = new ChartWrapper(parent, this.display.canvas);
 
     this.resize();
     this.init();
@@ -28,7 +32,8 @@ export default class Chart {
   private resize(): void {
     this.model.resize();
     this.display.onResize(this.model);
-    this.model.layout.updateInnerBoundingRect(this.display.wrapper.$inner);
+    this.wrapper.onResize(this.model.layout);
+    this.model.layout.updateInnerBoundingRect(this.wrapper.$inner);
   }
 
   public async init(): Promise<void> {
@@ -37,6 +42,7 @@ export default class Chart {
     const data = await this.onInitFetch();
     this.model.init(data);
     this.display.onFetch(this.model);
+    this.wrapper.update(this.model.data, this.model.pointer);
   }
 
   private assingStaticData() {
@@ -45,18 +51,26 @@ export default class Chart {
   }
 
   private assignEvents(): void {
-    const { wrapper } = this.display;
     window.addEventListener('resize', debounce(this.resize.bind(this), 100));
 
-    wrapper.$zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
-    wrapper.$zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
+    this.wrapper.$zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
+    this.wrapper.$zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
 
-    wrapper.$inner.addEventListener('mousedown', this.mouseDown.bind(this));
-    wrapper.$inner.addEventListener('mousemove', this.mouseMove());
-    wrapper.$inner.addEventListener('mouseleave', this.mouseLeave.bind(this));
-    wrapper.$inner.addEventListener('touchstart', this.touchStart.bind(this));
-    wrapper.$inner.addEventListener('touchmove', this.touchMove());
-    wrapper.$inner.addEventListener('touchend', this.mouseUp.bind(this));
+    this.wrapper.$inner.addEventListener(
+      'mousedown',
+      this.mouseDown.bind(this)
+    );
+    this.wrapper.$inner.addEventListener('mousemove', this.mouseMove());
+    this.wrapper.$inner.addEventListener(
+      'mouseleave',
+      this.mouseLeave.bind(this)
+    );
+    this.wrapper.$inner.addEventListener(
+      'touchstart',
+      this.touchStart.bind(this)
+    );
+    this.wrapper.$inner.addEventListener('touchmove', this.touchMove());
+    this.wrapper.$inner.addEventListener('touchend', this.mouseUp.bind(this));
     window.addEventListener('mouseup', this.mouseUp.bind(this));
   }
 
@@ -75,6 +89,7 @@ export default class Chart {
     this.model.onMouseMove([e.clientX, e.clientY]);
     if (!this.control.isMouseDown) {
       this.display.onMouseMove(this.model);
+      this.wrapper.update(this.model.data, this.model.pointer);
       return;
     }
 
@@ -109,6 +124,7 @@ export default class Chart {
   private mouseLeave(): void {
     this.model.onMouseMove(null);
     this.display.onMouseMove(this.model);
+    this.wrapper.update(this.model.data, this.model.pointer);
   }
 
   private async onNeedMoreData(): Promise<void> {
@@ -129,6 +145,7 @@ export default class Chart {
     const data = await this.onFetchMore();
     this.model.onFetch(data);
     this.display.onFetch(this.model);
+    this.wrapper.update(this.model.data, this.model.pointer);
     this.model.finishLoading();
   }
 

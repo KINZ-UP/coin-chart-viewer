@@ -4,9 +4,8 @@ import Pointer from '../../../model/Pointer';
 export default class ItemLegend extends HTMLDivElement {
   public title: string = '';
   public value: number | undefined = undefined;
-  constructor(public type: string, public data: Data, public pointer: Pointer) {
+  constructor(public type: string) {
     super();
-    this.data.dataList[0]?.openPrice;
 
     this.className = 'item-legend';
     switch (type) {
@@ -33,26 +32,26 @@ export default class ItemLegend extends HTMLDivElement {
     this.render();
   }
 
-  update() {
-    const data = this.pointer.idx
-      ? this.data.dataOnView[this.pointer.idx] ?? this.data.dataList[0]
-      : this.data.dataList[0];
+  update(data: Data, pointer: Pointer) {
+    const d = pointer.idx
+      ? data.dataOnView[pointer.idx] ?? data.dataList[0]
+      : data.dataList[0];
 
     switch (this.type) {
       case 'OPEN_PRICE': {
-        this.value = data?.openPrice;
+        this.value = d?.openPrice;
         break;
       }
       case 'CLOSE_PRICE': {
-        this.value = data?.closePrice;
+        this.value = d?.closePrice;
         break;
       }
       case 'HIGH_PRICE': {
-        this.value = data?.highPrice;
+        this.value = d?.highPrice;
         break;
       }
       case 'LOW_PRICE': {
-        this.value = data?.lowPrice;
+        this.value = d?.lowPrice;
         break;
       }
       default:

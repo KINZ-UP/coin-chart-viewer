@@ -40,6 +40,7 @@ export default class App extends Subscriber {
   private async init() {
     new Header();
     this.chart = new Chart(
+      '#root',
       800,
       600,
       undefined,

@@ -14,10 +14,10 @@ export default class ChartWrapper {
   public $zoomOutBtn: HTMLButtonElement = document.createElement('button');
   public $legend: Legend;
 
-  constructor(public canvas: HTMLCanvasElement, data: Data, pointer: Pointer) {
-    this.$legend = new Legend(data, pointer);
+  constructor(parent: string, public canvas: HTMLCanvasElement) {
+    const root = document.querySelector(parent) || document.body;
 
-    const root = document.getElementById('root');
+    this.$legend = new Legend();
 
     this.$outer.id = 'canvas-outer-wrapper';
     this.$inner.id = 'canvas-inner-wrapper';
@@ -75,5 +75,9 @@ export default class ChartWrapper {
     this.$buttonWrapper.style.bottom =
       lower.margin.bottom + lower.height + gap / 2 + 'px';
     this.$buttonWrapper.style.right = upper.margin.right + width / 2 + 'px';
+  }
+
+  public update(data: Data, pointer: Pointer) {
+    this.$legend.update(data, pointer);
   }
 }

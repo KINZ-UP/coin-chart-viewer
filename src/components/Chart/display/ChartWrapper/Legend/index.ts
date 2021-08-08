@@ -11,14 +11,14 @@ export default class Legend extends HTMLDivElement {
   public $closePrice: LegendItem;
   public $highPrice: LegendItem;
   public $lowPrice: LegendItem;
-  constructor(data: Data, pointer: Pointer) {
+  constructor() {
     super();
 
-    this.$date = new DateWrapper(data, pointer);
-    this.$openPrice = new LegendItem('OPEN_PRICE', data, pointer);
-    this.$closePrice = new LegendItem('CLOSE_PRICE', data, pointer);
-    this.$highPrice = new LegendItem('HIGH_PRICE', data, pointer);
-    this.$lowPrice = new LegendItem('LOW_PRICE', data, pointer);
+    this.$date = new DateWrapper();
+    this.$openPrice = new LegendItem('OPEN_PRICE');
+    this.$closePrice = new LegendItem('CLOSE_PRICE');
+    this.$highPrice = new LegendItem('HIGH_PRICE');
+    this.$lowPrice = new LegendItem('LOW_PRICE');
 
     this.id = 'item-legend-container';
     this.$date.id = 'item-date-wrapper';
@@ -38,9 +38,9 @@ export default class Legend extends HTMLDivElement {
     );
   }
 
-  update() {
-    this.$date.update();
-    this.items.forEach((legend) => legend.update());
+  public update(data: Data, pointer: Pointer) {
+    this.$date.update(data, pointer);
+    this.items.forEach((legend) => legend.update(data, pointer));
   }
 }
 
