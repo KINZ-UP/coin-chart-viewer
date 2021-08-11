@@ -18,10 +18,10 @@ export default class TrVolumeBar {
   ) {
     this.posX =
       globalState.posXLeftByIdx[idx] +
-      globalState.barWidth * chartConfig.barPaddingRatio.trVolumeChart;
+      globalState.barWidth * chartConfig.barSpacingRatio.trVolumeChart;
     this.width =
       globalState.barWidth *
-      (1 - 2 * chartConfig.barPaddingRatio.trVolumeChart);
+      (1 - 2 * chartConfig.barSpacingRatio.trVolumeChart);
 
     this.baseY = scaleY(0);
     this.height = scaleY(data.tradeVolume) - this.baseY;

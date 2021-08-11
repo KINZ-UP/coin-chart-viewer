@@ -5,7 +5,6 @@ import Subscriber from './store/Subscriber';
 import store, { State } from './store';
 import { updateMarketList } from './store/reducer';
 import { chartData, data } from './components/Chart/model/data';
-import chartConfig from './components/Chart/chartConfig';
 import formatDatetimeReqStr from './lib/formatDatetimeReqStr';
 
 export type Market = {
@@ -15,16 +14,13 @@ export type Market = {
   [key: string]: string;
 };
 
-const { openPrice, closePrice, highPrice, lowPrice, tradeVolume, dateTime } =
-  chartConfig.dataProperties;
-
 export type rawData = {
-  [openPrice]: number;
-  [closePrice]: number;
-  [highPrice]: number;
-  [lowPrice]: number;
-  [tradeVolume]: number;
-  [dateTime]: string;
+  opening_price: number;
+  trade_price: number;
+  high_price: number;
+  low_price: number;
+  candle_acc_trade_volume: number;
+  candle_date_time_kst: string;
   [key: string]: any;
 };
 

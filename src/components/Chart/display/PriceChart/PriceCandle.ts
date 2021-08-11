@@ -33,13 +33,11 @@ export default class PriceCandle {
 
     this.posXLeft =
       globalState.posXLeftByIdx[idx] +
-      globalState.barWidth * chartConfig.barPaddingRatio.priceChart;
+      globalState.barWidth * chartConfig.barSpacingRatio.priceChart;
 
     this.posXCenter = globalState.posXCenterByIdx[idx];
     this.width =
-      globalState.barWidth * (1 - 2 * chartConfig.barPaddingRatio.priceChart);
-
-    // console.log(idx, this.posXLeft);
+      globalState.barWidth * (1 - 2 * chartConfig.barSpacingRatio.priceChart);
 
     this.draw();
   }

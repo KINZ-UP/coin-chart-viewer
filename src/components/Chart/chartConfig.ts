@@ -1,5 +1,10 @@
 const chartConfig = {
-  geoConfiguration: {
+  movingAverageList: [
+    { interval: 5, color: 'green' },
+    { interval: 10, color: 'orange' },
+    { interval: 20, color: 'gray' },
+  ],
+  layout: {
     margin: {
       ratio: {
         top: 0.1,
@@ -57,26 +62,10 @@ const chartConfig = {
     fontSizeRatio: 0.03,
     topPadding: 5,
   },
-  barPaddingRatio: {
+  barSpacingRatio: {
     priceChart: 0.1,
     trVolumeChart: 0.3,
   },
-  outline: {
-    strokeStyle: '#e0e0e0',
-  },
-  dataProperties: {
-    openPrice: 'opening_price' as const,
-    closePrice: 'trade_price' as const,
-    highPrice: 'high_price' as const,
-    lowPrice: 'low_price' as const,
-    tradeVolume: 'candle_acc_trade_volume' as const,
-    dateTime: 'candle_date_time_kst' as const,
-  },
-  movingAverageList: [
-    { interval: 5, color: 'green' },
-    { interval: 10, color: 'orange' },
-    { interval: 20, color: 'gray' },
-  ],
   pointerGrid: {
     color: '#999',
   },

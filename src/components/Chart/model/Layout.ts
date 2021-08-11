@@ -32,7 +32,7 @@ export default class Layout {
     margin: { top: 0, left: 0, bottom: 0, right: 0 },
   };
   public gap: number;
-  public settings = chartConfig.geoConfiguration;
+  public settings = chartConfig.layout;
   public innerBoundingClientRect: { left: number; top: number } = {
     left: 0,
     top: 0,
@@ -44,10 +44,10 @@ export default class Layout {
   public resize() {
     const { clientWidth } = document.documentElement;
     this.canvasWidth = Math.min(this.maxCanvasWidth, clientWidth);
-    this.canvasHeight = chartConfig.geoConfiguration.maxAspectRatio
+    this.canvasHeight = chartConfig.layout.maxAspectRatio
       ? Math.min(
           this.maxCanvasHeight,
-          clientWidth * chartConfig.geoConfiguration.maxAspectRatio
+          clientWidth * chartConfig.layout.maxAspectRatio
         )
       : this.maxCanvasHeight;
 
