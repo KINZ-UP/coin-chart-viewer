@@ -12,9 +12,9 @@ export default class Chart {
   public wrapper: ChartWrapper;
 
   constructor(
-    parent: string,
     maxCanvasWidth: number,
     maxCanvasHeight: number,
+    $parentElem?: HTMLElement | null,
     private staticData?: data[],
     private onInitFetch?: () => Promise<data[]>,
     private onFetchMore?: () => Promise<data[]>
@@ -22,7 +22,7 @@ export default class Chart {
     this.model = new Model(maxCanvasWidth, maxCanvasHeight);
     this.display = new Display();
     this.control = new Control();
-    this.wrapper = new ChartWrapper(parent, this.display.canvas);
+    this.wrapper = new ChartWrapper(this.display.canvas, $parentElem);
 
     this.resize();
     this.init();

@@ -14,8 +14,11 @@ export default class ChartWrapper {
   public $zoomOutBtn: HTMLButtonElement = document.createElement('button');
   public $legend: Legend;
 
-  constructor(parent: string, public canvas: HTMLCanvasElement) {
-    const root = document.querySelector(parent) || document.body;
+  constructor(
+    public canvas: HTMLCanvasElement,
+    $parentElem?: HTMLElement | null
+  ) {
+    const root = $parentElem || document.body;
 
     this.$legend = new Legend();
 

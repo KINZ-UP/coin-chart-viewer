@@ -40,9 +40,9 @@ export default class App extends Subscriber {
   private async init() {
     new Header();
     this.chart = new Chart(
-      '#root',
       800,
       600,
+      document.getElementById('root'),
       undefined,
       this.onInitFetch.bind(this),
       this.onFetchMore.bind(this)
