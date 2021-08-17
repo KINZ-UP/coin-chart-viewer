@@ -45,7 +45,7 @@ Chart
 └── ...
 ```
 
-<br><br>
+<br>
 
 ### Modularizing Chart Component
 
@@ -81,7 +81,7 @@ class Chart {
 }
 ```
 
-<br><br>
+<br>
 
 ### Customizing Style
 
@@ -104,7 +104,7 @@ const chartConfig = {
 }
 ```
 
-<br><br>
+<br>
 
 ### Optimizing Rendering
 
@@ -117,6 +117,8 @@ const chartConfig = {
 - 스크린 너비에 따른 반응형 UI 구현
 - resize 이벤트 적용
   <br>
+  |Wide|Narrow|
+  |:--:|:--:|
   |<img src="/images/wide.png" width=300>|<img src="/images/narrow.png" width=180>|
   <br><br>
 
