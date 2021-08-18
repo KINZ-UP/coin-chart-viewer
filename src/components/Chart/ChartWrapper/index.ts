@@ -1,6 +1,6 @@
-import Data from '../../model/data';
-import Layout from '../../model/Layout';
-import Pointer from '../../model/Pointer';
+import Data from '../model/data';
+import Layout from '../model/Layout';
+import Pointer from '../model/Pointer';
 import Legend from './Legend';
 
 export default class ChartWrapper {

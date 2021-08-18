@@ -2,7 +2,7 @@ import { data } from './model/data';
 import Model from './model';
 import Display from './display';
 import Control from './control';
-import ChartWrapper from './display/ChartWrapper';
+import ChartWrapper from './ChartWrapper';
 import debounce from './lib/debounce';
 
 export default class Chart {

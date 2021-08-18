@@ -1,6 +1,6 @@
 import moment from 'moment';
-import Data, { dateTimeUnit } from '../../../model/Data';
-import Pointer from '../../../model/Pointer';
+import Data, { dateTimeUnit } from '../../model/Data';
+import Pointer from '../../model/Pointer';
 
 export default class DateWrapper extends HTMLDivElement {
   constructor() {
