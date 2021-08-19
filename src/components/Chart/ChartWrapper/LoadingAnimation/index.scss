@@ -1,0 +1,41 @@
+#chart-loading-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 3.5rem;
+  height: 3.5rem;
+
+  background-color: rgba(10, 10, 10, 0.3);
+  border-radius: 50%;
+
+  display: none;
+  &.loading {
+    display: block;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+    stroke-width: 0.7em;
+    stroke-dasharray: 13em;
+    stroke-dashoffset: 13em;
+    stroke-linecap: round;
+    animation: 2s rotating infinite linear;
+  }
+
+  @keyframes rotating {
+    0% {
+      stroke-dashoffset: 13em;
+      transform: rotate(0turn);
+    }
+    50% {
+      stroke-dashoffset: 25em;
+    }
+    100% {
+      stroke-dashoffset: 13em;
+      transform: rotate(3turn);
+    }
+  }
+}

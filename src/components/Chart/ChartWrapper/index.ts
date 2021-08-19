@@ -2,6 +2,7 @@ import Data from '../model/data';
 import Layout from '../model/Layout';
 import Pointer from '../model/Pointer';
 import Legend from './Legend';
+import LoadingAnimation from './LoadingAnimation';
 
 export default class ChartWrapper {
   public $outer: HTMLElement = document.createElement('div');
@@ -13,6 +14,7 @@ export default class ChartWrapper {
   public $zoomInBtn: HTMLButtonElement = document.createElement('button');
   public $zoomOutBtn: HTMLButtonElement = document.createElement('button');
   public $legend: Legend;
+  public $loadingAnimation: LoadingAnimation;
 
   constructor(
     public canvas: HTMLCanvasElement,
@@ -21,6 +23,7 @@ export default class ChartWrapper {
     const root = $parentElem || document.body;
 
     this.$legend = new Legend();
+    this.$loadingAnimation = new LoadingAnimation();
 
     this.$outer.id = 'canvas-outer-wrapper';
     this.$inner.id = 'canvas-inner-wrapper';
@@ -39,6 +42,7 @@ export default class ChartWrapper {
     this.$gap.classList.add('section-wrapper');
 
     this.$inner.appendChild(this.$legend);
+    this.$inner.appendChild(this.$loadingAnimation);
     this.$outer.appendChild(this.$upper);
     this.$outer.appendChild(this.$lower);
     this.$outer.appendChild(this.canvas);
@@ -82,5 +86,13 @@ export default class ChartWrapper {
 
   public update(data: Data, pointer: Pointer) {
     this.$legend.update(data, pointer);
+  }
+
+  public startLoading() {
+    this.$loadingAnimation.startLoading();
+  }
+
+  public finishLoading() {
+    this.$loadingAnimation.finishLoading();
   }
 }

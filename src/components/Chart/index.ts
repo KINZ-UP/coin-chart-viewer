@@ -39,10 +39,12 @@ export default class Chart {
   public async init(): Promise<void> {
     this.assingStaticData();
     if (!this.onInitFetch) return;
+    this.wrapper.startLoading();
     const data = await this.onInitFetch();
     this.model.init(data);
     this.display.onFetch(this.model);
     this.wrapper.update(this.model.data, this.control.pointer);
+    this.wrapper.finishLoading();
   }
 
   private assingStaticData() {
@@ -149,12 +151,12 @@ export default class Chart {
     )
       return;
 
-    this.model.startLoading();
+    this.wrapper.startLoading();
     const data = await this.onFetchMore();
     this.model.onFetch(data);
     this.display.onFetch(this.model);
     this.wrapper.update(this.model.data, this.control.pointer);
-    this.model.finishLoading();
+    this.wrapper.finishLoading();
   }
 
   private mouseUp(): void {
