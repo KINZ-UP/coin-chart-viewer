@@ -11,14 +11,14 @@ export default class Display {
   public priceChart: PriceChart;
   public trVolumeChart: TrVolumeChart;
   public xAxis: XAxis;
-  public pointerGrid: PointerGrid;
+  public pointerGrid: PointerGrid | null;
 
   constructor() {
     this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
     this.priceChart = new PriceChart(this.ctx);
     this.trVolumeChart = new TrVolumeChart(this.ctx);
     this.xAxis = new XAxis(this.ctx);
-    this.pointerGrid = new PointerGrid(this.ctx);
+    this.pointerGrid = null;
   }
 
   private draw(model: Model) {
@@ -29,7 +29,13 @@ export default class Display {
   }
 
   private drawPointerGrid(model: Model, pointer: Pointer) {
+    if (!this.pointerGrid) return;
     this.pointerGrid.draw(model, pointer, this.trVolumeChart.yAxis.formatTick);
+  }
+
+  public initPointerGrid() {
+    if (this.pointerGrid) return;
+    this.pointerGrid = new PointerGrid(this.ctx);
   }
 
   public onChange(model: Model) {

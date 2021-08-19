@@ -13,7 +13,7 @@ export default class ChartWrapper {
   public $buttonWrapper: HTMLElement = document.createElement('div');
   public $zoomInBtn: HTMLButtonElement = document.createElement('button');
   public $zoomOutBtn: HTMLButtonElement = document.createElement('button');
-  public $legend: Legend;
+  public $legend: Legend | null = null;
   public $loadingAnimation: LoadingAnimation;
 
   constructor(
@@ -22,7 +22,6 @@ export default class ChartWrapper {
   ) {
     const root = $parentElem || document.body;
 
-    this.$legend = new Legend();
     this.$loadingAnimation = new LoadingAnimation();
 
     this.$outer.id = 'canvas-outer-wrapper';
@@ -41,7 +40,6 @@ export default class ChartWrapper {
     this.$lower.classList.add('section-wrapper');
     this.$gap.classList.add('section-wrapper');
 
-    this.$inner.appendChild(this.$legend);
     this.$inner.appendChild(this.$loadingAnimation);
     this.$outer.appendChild(this.$upper);
     this.$outer.appendChild(this.$lower);
@@ -85,6 +83,7 @@ export default class ChartWrapper {
   }
 
   public update(data: Data, pointer: Pointer) {
+    if (!this.$legend) return;
     this.$legend.update(data, pointer);
   }
 
@@ -94,5 +93,11 @@ export default class ChartWrapper {
 
   public finishLoading() {
     this.$loadingAnimation.finishLoading();
+  }
+
+  public renderLegend() {
+    if (this.$legend) return;
+    this.$legend = new Legend();
+    this.$inner.appendChild(this.$legend);
   }
 }

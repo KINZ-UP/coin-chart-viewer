@@ -5,6 +5,13 @@ import Control from './control';
 import ChartWrapper from './ChartWrapper';
 import debounce from './lib/debounce';
 
+type FetchOption = {
+  staticData?: data[];
+  onInitFetch?: () => Promise<data[]>;
+  onFetchMore?: () => Promise<data[]>;
+  onFetchError?: () => void;
+};
+
 export default class Chart {
   public model: Model;
   public display: Display;
@@ -14,10 +21,8 @@ export default class Chart {
   constructor(
     maxCanvasWidth: number,
     maxCanvasHeight: number,
-    $parentElem?: HTMLElement | null,
-    private staticData?: data[],
-    private onInitFetch?: () => Promise<data[]>,
-    private onFetchMore?: () => Promise<data[]>
+    $parentElem: HTMLElement | null,
+    private fetchOption?: FetchOption
   ) {
     this.model = new Model(maxCanvasWidth, maxCanvasHeight);
     this.display = new Display();
@@ -26,7 +31,8 @@ export default class Chart {
 
     this.resize();
     this.init();
-    this.assignEvents();
+
+    window.addEventListener('resize', debounce(this.resize.bind(this), 100));
   }
 
   private resize(): void {
@@ -36,25 +42,56 @@ export default class Chart {
     this.model.layout.updateInnerBoundingRect(this.wrapper.$inner);
   }
 
+  private assingStaticData() {
+    if (!this.fetchOption?.staticData) return;
+    this.model.init(this.fetchOption.staticData);
+  }
+
   public async init(): Promise<void> {
     this.assingStaticData();
-    if (!this.onInitFetch) return;
+    if (!this.fetchOption?.onInitFetch) return;
     this.wrapper.startLoading();
-    const data = await this.onInitFetch();
-    this.model.init(data);
-    this.display.onFetch(this.model);
-    this.wrapper.update(this.model.data, this.control.pointer);
+    try {
+      const data = await this.fetchOption.onInitFetch();
+      this.model.init(data);
+      this.display.onFetch(this.model);
+      this.display.initPointerGrid();
+      this.wrapper.renderLegend();
+      this.wrapper.update(this.model.data, this.control.pointer);
+      this.assignEvents();
+    } catch (e) {
+      if (this.fetchOption.onFetchError) this.fetchOption.onFetchError();
+    }
     this.wrapper.finishLoading();
   }
 
-  private assingStaticData() {
-    if (!this.staticData) return;
-    this.model.init(this.staticData);
+  private async onNeedMoreData(): Promise<void> {
+    if (!this.fetchOption?.onFetchMore) return;
+    if (this.model.data.noMore) return;
+    if (this.model.loading) return;
+
+    const dataList = this.model.data.dataList;
+    if (
+      dataList.length -
+        this.model.state.global.offsetCount -
+        this.model.data.dataOnView.length >=
+      50
+    )
+      return;
+
+    this.wrapper.startLoading();
+    try {
+      const data = await this.fetchOption.onFetchMore();
+      this.model.onFetch(data);
+      this.display.onFetch(this.model);
+      this.wrapper.update(this.model.data, this.control.pointer);
+    } catch (e) {
+      if (this.fetchOption.onFetchError) this.fetchOption.onFetchError();
+    }
+    this.wrapper.finishLoading();
   }
 
   private assignEvents(): void {
-    window.addEventListener('resize', debounce(this.resize.bind(this), 100));
-
     this.wrapper.$zoomInBtn.addEventListener('click', this.zoomIn.bind(this));
     this.wrapper.$zoomOutBtn.addEventListener('click', this.zoomOut.bind(this));
 
@@ -135,28 +172,6 @@ export default class Chart {
     );
     this.display.onMouseMove(this.model, this.control.pointer);
     this.wrapper.update(this.model.data, this.control.pointer);
-  }
-
-  private async onNeedMoreData(): Promise<void> {
-    if (!this.onFetchMore) return;
-    if (this.model.data.noMore) return;
-    if (this.model.loading) return;
-
-    const dataList = this.model.data.dataList;
-    if (
-      dataList.length -
-        this.model.state.global.offsetCount -
-        this.model.data.dataOnView.length >=
-      50
-    )
-      return;
-
-    this.wrapper.startLoading();
-    const data = await this.onFetchMore();
-    this.model.onFetch(data);
-    this.display.onFetch(this.model);
-    this.wrapper.update(this.model.data, this.control.pointer);
-    this.wrapper.finishLoading();
   }
 
   private mouseUp(): void {
