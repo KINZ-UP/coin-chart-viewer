@@ -50,35 +50,15 @@ Chart
 ### Modularizing Chart Component
 
 - 차트가 어플리케이션이나 데이터 API에 의존하지 않도록 독립적인 컴포넌트로 구현
-- 차트 데이터 바인딩에 필요한 API (staticData, onInitFetch, onFetchMore 등) 제공
+- 차트 데이터 바인딩에 필요한 API (staticData, onInitFetch, onFetchMore, onFetchError 등) 분리
 
 ```ts
-class Chart {
-	public model: Model;
-  public display: Display;
-  public control: Control;
-  public wrapper: ChartWrapper;
-
-  constructor(
-    maxCanvasWidth: number,
-    maxCanvasHeight: number,
-    $parentElem?: HTMLElement | null,
-    private staticData?: data[],
-    private onInitFetch?: () => Promise<data[]>,
-    private onFetchMore?: () => Promise<data[]>
-  ) {
-    this.model = new Model(maxCanvasWidth, maxCanvasHeight);
-    this.display = new Display();
-    this.control = new Control();
-    this.wrapper = new ChartWrapper(this.display.canvas, $parentElem);
-
-		...
-
-	}
-
-	...
-
-}
+type FetchOption = {
+  staticData?: data[];
+  onInitFetch?: () => Promise<data[]>;
+  onFetchMore?: () => Promise<data[]>;
+  onFetchError?: () => void;
+};
 ```
 
 <br>

@@ -1,5 +1,5 @@
-import Data from '../../../model/Data';
-import Pointer from '../../../model/Pointer';
+import Data from '../../model/Data';
+import Pointer from '../../model/Pointer';
 import DateWrapper from './DateWrapper';
 import LegendItem from './LegendItem';
 

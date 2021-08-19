@@ -2,8 +2,8 @@ import DataFetch, { dataQuery } from './api/DataFetch';
 import Chart from './components/Chart';
 import Header from './components/Headers';
 import Subscriber from './store/Subscriber';
-import store, { State } from './store';
-import { updateMarketList } from './store/reducer';
+import store from './store';
+import { State, updateMarketList } from './store/reducer';
 import { chartData, data } from './components/Chart/model/data';
 import formatDatetimeReqStr from './lib/formatDatetimeReqStr';
 
@@ -35,14 +35,11 @@ export default class App extends Subscriber {
 
   private async init() {
     new Header();
-    this.chart = new Chart(
-      800,
-      600,
-      document.getElementById('root'),
-      undefined,
-      this.onInitFetch.bind(this),
-      this.onFetchMore.bind(this)
-    );
+    this.chart = new Chart(800, 600, document.getElementById('root'), {
+      onFetchMore: this.onFetchMore.bind(this),
+      onInitFetch: this.onInitFetch.bind(this),
+      onFetchError: () => alert('데이터 로드에 실패하였습니다.'),
+    });
 
     const fetchedList: Market[] = await this.dataFetch.getMarketList();
     store.dispatch(updateMarketList(fetchedList.filter(this.isKRW)));
@@ -71,11 +68,12 @@ export default class App extends Subscriber {
       minute: this.state.minute,
       count: 100,
     };
+
     const fetchedData: rawData = await this.dataFetch.fetchData(dataQuery);
     return fetchedData.map(this.dataProcess);
   }
 
-  async onFetchMore(): Promise<data[]> {
+  private async onFetchMore(): Promise<data[]> {
     const { dataList } = this.chart.model.data;
     const dataQuery: dataQuery = {
       market: this.state.market.market,

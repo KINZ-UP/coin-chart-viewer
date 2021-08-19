@@ -1,5 +1,5 @@
-import store, { State } from '../store';
-import { initialState } from './reducer';
+import store from '../store';
+import { initialState, State } from './reducer';
 
 export default class Subscriber {
   public state: State = initialState;

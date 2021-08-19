@@ -1,7 +1,6 @@
-import { State, Action } from '../Store';
 import { Market } from '../App';
 
-type state = {
+export type State = {
   market: Market;
   marketList: Market[];
   unit: string;
@@ -30,7 +29,13 @@ export const changeUnitToMinute = (minute: string) => ({
   payload: minute,
 });
 
-export const initialState: state = {
+export type Action =
+  | ReturnType<typeof updateMarketList>
+  | ReturnType<typeof changeMarket>
+  | ReturnType<typeof changeUnit>
+  | ReturnType<typeof changeUnitToMinute>;
+
+export const initialState: State = {
   market: {
     market: 'KRW-BTC',
     korean_name: '비트코인',
