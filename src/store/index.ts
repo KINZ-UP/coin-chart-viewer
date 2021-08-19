@@ -1,15 +1,12 @@
+import { State, Action } from './reducer';
 import Subscriber from './Subscriber';
 import reducer, { initialState } from './reducer';
 import deepCopy from '../lib/deepCopy';
 
-export type State = {
-  [key: string]: any;
-};
-
-export type Action = {
-  type: string;
-  payload: any;
-};
+// export type Action = {
+//   type: string;
+//   payload: any;
+// };
 
 class Store {
   private static instance: Store | null = null;
