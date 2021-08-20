@@ -1,6 +1,7 @@
 import './index.scss';
 
 export default class LoadingAnimation extends HTMLDivElement {
+  public timeoutId: ReturnType<typeof setTimeout> | null = null;
   constructor() {
     super();
     this.id = 'chart-loading-animation';
@@ -12,9 +13,10 @@ export default class LoadingAnimation extends HTMLDivElement {
   }
 
   startLoading() {
-    this.classList.add('loading');
+    this.timeoutId = setTimeout(() => this.classList.add('loading'), 500);
   }
   finishLoading() {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
     this.classList.remove('loading');
   }
 }
