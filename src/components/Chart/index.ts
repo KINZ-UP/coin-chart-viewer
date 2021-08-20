@@ -50,7 +50,7 @@ export default class Chart {
   public async init(): Promise<void> {
     this.assingStaticData();
     if (!this.fetchOption?.onInitFetch) return;
-    this.wrapper.startLoading();
+    this.startLoading();
     try {
       const data = await this.fetchOption.onInitFetch();
       this.model.init(data);
@@ -62,7 +62,7 @@ export default class Chart {
     } catch (e) {
       if (this.fetchOption.onFetchError) this.fetchOption.onFetchError();
     }
-    this.wrapper.finishLoading();
+    this.finishLoading();
   }
 
   private async onNeedMoreData(): Promise<void> {
@@ -79,7 +79,7 @@ export default class Chart {
     )
       return;
 
-    this.wrapper.startLoading();
+    this.startLoading();
     try {
       const data = await this.fetchOption.onFetchMore();
       this.model.onFetch(data);
@@ -88,6 +88,16 @@ export default class Chart {
     } catch (e) {
       if (this.fetchOption.onFetchError) this.fetchOption.onFetchError();
     }
+    this.finishLoading();
+  }
+
+  private startLoading() {
+    this.model.startLoading();
+    this.wrapper.startLoading();
+  }
+
+  private finishLoading() {
+    this.model.finishLoading();
     this.wrapper.finishLoading();
   }
 
